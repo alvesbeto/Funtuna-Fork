@@ -132,12 +132,10 @@ int GetIconType(unsigned long int ROMVERSION)
 
 	if (ROMVERSION >= 0x190)
 		icontype = SLIMS;
-
-	if ((ROMVERSION < 0x190) && (ROMVERSION >= 0x110))
-		icontype = FATS;
-
-	if (ROMVERSION == 0x170)
+	else if (ROMVERSION == 0x170)
 		icontype = FAT170;
+	else if (ROMVERSION >= 0x110)
+		icontype = FATS;
 
 	return icontype;
 }
@@ -628,7 +626,7 @@ int main (int argc, char *argv[])
 {
 	
 	int fdn, icontype;
-	unsigned long int ROM_VERSION;
+	unsigned long int ROM_VERSION = 0;
 	char romver[6];
 	VMode = NTSC;
 

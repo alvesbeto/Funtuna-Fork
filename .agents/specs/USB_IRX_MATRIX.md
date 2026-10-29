@@ -32,3 +32,9 @@ O Configurator **não** carrega módulos USB IRX no boot; usa `SYS-CONF` para se
 
 - [ ] IRX presentes em `BOOT` após install → USB funciona sem SYS-CONF
 - [ ] Remover IRX de `BOOT`, copiar para `SYS-CONF` → USB ainda funciona
+
+## exFAT USB (opcional, fora do pacote padrão)
+
+IRX em `BOOT/` vêm do PS2SDK (FAT32). Drivers errados no Configurator causavam freeze em `mass:/` ([FAQ](https://israpps.github.io/Funtuna-Fork/ASK-ENG.html), commit [b9e3d8f](https://github.com/israpps/Funtuna-Fork/commit/b9e3d8f4ff48df03c371a23702f78e8c52444e97)).
+
+**exFAT:** usar [BDM Assault](https://github.com/israpps/BDMAssault) manualmente em `mc?:/SYS-CONF/USBD.IRX` e `USBHDFSD.IRX` (ver [POPStarter BDM](https://nathanneurotic.github.io/POPSTARTERINFO/bdm-exfat.html)). Não substituir `BOOT/` sem testar CFG.ELF. Ver [Funtuna-Fork #26](https://github.com/israpps/Funtuna-Fork/issues/26).
