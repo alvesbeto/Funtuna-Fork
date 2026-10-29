@@ -353,7 +353,6 @@ static int install(int mcport, int icon_variant)
 	mcSync(0, NULL, &ret);
 	if (ret != -1){return NO_MEMORY_CARD;}
 	if (mc_Type != 2){return NO_PS2_MEMORY_CARD;}
-	if (mc_Free < 2000){return NOT_ENOUGH_SPACE;}
 
 	/* Destructive upgrade after user confirmed install (see INSTALLER_STATE_MATRIX).
 	 * Do not return FOUND_* here: legacy trees are removed intentionally. */
@@ -385,6 +384,13 @@ static int install(int mcport, int icon_variant)
 	DeleteFolder(temp_path);
 	}
 	// /CLEANUP
+
+	mcGetInfo(mcport, 0, &mc_Type, &mc_Free, &mc_Format);
+	mcSync(0, NULL, &ret);
+	scr_printf("\tFree clusters after cleanup: %u (need 2000)\n", (unsigned)mc_Free);
+	if (mc_Free < 2000)
+		return NOT_ENOUGH_SPACE;
+
 	//FOLDERS
 	scr_printf("\tCreating Folders...\n");
 	scr_printf("\t\tBOOT\n");

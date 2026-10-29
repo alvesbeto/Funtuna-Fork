@@ -2,13 +2,20 @@
 
 Fluxo UI: Welcome → L1/R1 (MC0/MC1) → `Choose_Install_Mode` (R2 = ROM auto, L2 = IconQuery) → install.
 
-## Pré-condições (bloqueiam antes de cleanup)
+## Pré-condições (antes do cleanup)
 
 | Código | Condição | Ação |
 |--------|----------|------|
 | `NO_MEMORY_CARD` | `mcGetInfo` falha | Mensagem NO_MEMORY_CARD |
 | `NO_PS2_MEMORY_CARD` | Tipo ≠ PS2 MC | NO_PS2_MC |
-| `NOT_ENOUGH_SPACE` | `mc_Free < 2000` clusters | NOT_ENOUGH_SPACE (**antes** do cleanup) |
+
+## Espaço livre (depois do cleanup)
+
+| Código | Condição | Ação |
+|--------|----------|------|
+| `NOT_ENOUGH_SPACE` | `mc_Free < 2000` clusters **após** apagar pastas legacy | NOT_ENOUGH_SPACE; **não** grava ficheiros |
+
+O instalador **não formata** a MC. Ver [installer/PRODUCT.md](installer/PRODUCT.md) e [TROUBLESHOOTING.md](TROUBLESHOOTING.md) (Memory Card Annihilator).
 
 ## Upgrade (destructive reinstall)
 
@@ -46,7 +53,8 @@ Auto (`GetIconType` + R2): ROM mapeada em `main.c` → variante default.
 | FunTuna fork (`BXEXEC-OPENTUNA`) | Cleanup + reinstall ok |
 | Fortuna (`FORTUNA/`) | Cleanup + reinstall ok |
 | Opentuna vanilla (`OPENTUNA/`) | Cleanup + reinstall ok |
-| `< 2000` clusters livres | NOT_ENOUGH_SPACE, **sem** cleanup |
+| `< 2000` livre **e** cleanup não liberta o suficiente | NOT_ENOUGH_SPACE após cleanup |
+| `< 2000` livre **mas** pastas FunTuna ocupavam espaço | Cleanup → install ok se `mc_Free ≥ 2000` depois |
 
 ## Embeds vs `__Binaries/`
 

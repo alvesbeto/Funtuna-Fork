@@ -17,4 +17,17 @@ Seções **1** e **3** em PROGRAM.md.
 - QA offline: `tools/inspect-ps2-bios-dump.sh`
 - Seed OPL (sem `conf_opl.cfg` pré-existente): `conf_opl.cfg`, ícones, `conf_game.cfg`, **`conf_apps.cfg`** — ver [../OPL_INTEGRATION.md](../OPL_INTEGRATION.md)
 
-**Status:** integração OPL (seed `conf_apps.cfg`) — ver OPL_INTEGRATION.md.
+## Memory card — espaço (não formata)
+
+O instalador **não** chama `mcFormat` (format completo fica para o browser Sony ou [Memory Card Annihilator](https://github.com/ffgriever-pl/Memory-Card-Annihilator)).
+
+| Passo | Comportamento |
+|-------|----------------|
+| Pré-check | `mcGetInfo`: cartão presente, tipo PS2 MC |
+| Cleanup | Apaga árvores FunTuna/Fortuna/Opentuna/OPL condicional ([INSTALLER_STATE_MATRIX.md](../INSTALLER_STATE_MATRIX.md)) |
+| Pós-cleanup | `mcGetInfo` de novo; se `mc_Free < 2000` clusters → `NOT_ENOUGH_SPACE` (mensagem BMP + orientação em [TROUBLESHOOTING.md](../TROUBLESHOOTING.md)) |
+| Escrita | `mcMkDir` + embeds |
+
+Isto permite upgrade/reinstall quando o pacote antigo ocupava clusters mas o cleanup libertava espaço suficiente.
+
+**Status:** integração OPL + política de espaço pós-cleanup.

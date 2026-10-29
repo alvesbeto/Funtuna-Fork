@@ -58,6 +58,20 @@ O instalador grava IRX **PS2SDK (FAT32)** em `mc?:/BOOT/` e **BDM Assault (exFAT
 
 **Pen para jogos:** copiar a árvore de `__Release/MANUAL_INSTALL/USB-OPL/` — ver [OPL_INTEGRATION.md](OPL_INTEGRATION.md).
 
+**MX4SIO (SD na porta MC):** o seed OPL traz `enable_mx4sio=1`; no menu OPL usar **BDM** / dispositivos de bloco. Cartão SD: MBR + exFAT ou FAT32, pastas `CD/`/`DVD/` como no USB ([OPL README](https://github.com/ps2homebrew/Open-PS2-Loader)). MC com `conf_opl.cfg` antigo → editar `enable_mx4sio=1` ou reinstalar sem config OPL.
+
+## Memory card — espaço e formatação
+
+O instalador FunTuna **não formata** a memory card. Apaga pastas do pacote (BOOT, APPS, exploit, etc.) e só depois mede clusters livres (mínimo **2000**). Ver [INSTALLER_STATE_MATRIX.md](INSTALLER_STATE_MATRIX.md).
+
+| Sintoma | Causa provável | Ação |
+|---------|----------------|------|
+| Ecrã **NOT_ENOUGH_SPACE** após instalar | Saves/outros ficheiros ocupam a MC; cleanup do FunTuna não chegou | Apagar saves ou outros jogos; tentar reinstall (upgrade apaga só árvores FunTuna/Fortuna/Opentuna/OPL condicional) |
+| Ainda sem espaço | MC quase cheia ou não formatada | Format no **browser** Sony (Memory Card) **ou** [Memory Card Annihilator](https://github.com/ffgriever-pl/Memory-Card-Annihilator) (`mca_new` = exFAT USB + dump/restore antes de format) |
+| Queres backup antes de format | — | MCA: dump da imagem da MC para USB/PC; depois format ou restore |
+
+Durante a instalação, o texto no ecrã mostra `Free clusters after cleanup` — útil para confirmar se o cleanup libertou espaço.
+
 ## HDD-OSD / Browser 2.0
 
 OpenTuna/Fortuna **incompatível** com HDD-OSD ativo — pode bloquear reconhecimento da MC até power cycle ([ConsoleMods](https://consolemods.org/wiki/PS2:Fortuna/Opentuna)).

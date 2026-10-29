@@ -9,7 +9,7 @@ O FunTuna entrega OPL em `mc?:/APPS/OPNPS2LD.ELF` e presets em `mc?:/OPL/`, mas 
 
 ## Experiência desejada
 
-- Instalação limpa ou upgrade **sem** `conf_opl.cfg` existente → seed inclui `conf_opl.cfg`, ícones, `conf_game.cfg` e **`conf_apps.cfg`** (FunTuna, CFG, ULE, OPL).
+- Instalação limpa ou upgrade **sem** `conf_opl.cfg` existente → seed inclui `conf_opl.cfg` (`usb_mode=2` BDM/exFAT USB, **`enable_mx4sio=1`**), ícones, `conf_game.cfg` e **`conf_apps.cfg`**.
 - Utilizador com OPL já configurado → installer **não** sobrescreve `mc?:/OPL/conf_opl.cfg` nem injeta `conf_apps.cfg`.
 - **CFG.ELF** ao usar `mass:/` carrega IRX na mesma ordem que **BOOT.ELF** (SYS-CONF BDM antes de BOOT PS2SDK).
 - Maintainer pode disparar workflow para registar pin SHA-256 do `OPNPS2LD.ELF` upstream; rebuild local via `bootstrap-installer-vendor.sh`.

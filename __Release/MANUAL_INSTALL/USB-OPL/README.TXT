@@ -31,6 +31,8 @@ Folders (OPL standard):
 
 MC install already provides mc?:/APPS/OPNPS2LD.ELF and mc?:/OPL/ settings after FunTuna installer.
 A instalação na MC já inclui mc?:/APPS/OPNPS2LD.ELF e mc?:/OPL/ após o instalador FunTuna.
+Seed OPL: enable_mx4sio=1 (SD via MX4SIO adapter on memory card port) — same CD/DVD tree on the SD card (MBR, exFAT or FAT32).
+Seed OPL: enable_mx4sio=1 (SD no adaptador MX4SIO na porta MC) — mesma árvore CD/DVD no cartão (MBR, exFAT ou FAT32).
 
 See: https://github.com/ps2homebrew/Open-PS2-Loader
 Ver: https://github.com/ps2homebrew/Open-PS2-Loader
