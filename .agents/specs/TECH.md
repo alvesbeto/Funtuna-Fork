@@ -46,15 +46,7 @@ Ou altere `PAYLOAD` em `opentuna/exploit/Makefile` e `make -C opentuna/exploit a
 
 ## USB fallback (fase B)
 
-Implementação de referência FMCB:
-
-```202:205:FreeMcBoot/launcher2.c
-char usbd_irx_path_sysconf[30] = "mc0:/SYS-CONF/USBD.IRX";
-// ...
-char usb_mass_irx_path_sysconf[30] = "mc0:/SYS-CONF/USBHDFSD.IRX";
-```
-
-Carregamento tenta paths `BOOT` antes de `SYS-CONF` (ver bloco ~1888 em `launcher2.c`).
+Implementação FMCB (`load_modules` em `launcher2.c`): tenta, por ordem, par completo **SYS-CONF** (mc0 → mc1) e depois **BOOT** (mc0 → mc1). Motivação: BDM Assault / exFAT em `SYS-CONF` sem sobrescrever IRX PS2SDK em `BOOT/` (Configurator). Detalhe: [USB_IRX_MATRIX.md](USB_IRX_MATRIX.md).
 
 **Tarefa técnica:** auditar Configurator para equivalente onde IRX/USB são assumidos; extrair constantes compartilhadas só se reduzir drift sem aumentar footprint EE.
 

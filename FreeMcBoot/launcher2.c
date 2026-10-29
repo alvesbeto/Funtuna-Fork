@@ -1881,31 +1881,29 @@ void load_modules(void)
 
 	SifExecModuleBuffer(&iomanx_irx, size_iomanx_irx, 0, NULL, &ret);
 
-	///try to load usb modules from...
-	/* **************************USBD.IRX****************************************** */
-	if (SifLoadModule(usbd_irx_path, 0, NULL) < 0) /**mc0:/BOOT/USBD.IRX*/
+	/* USB IRX: prefer SYS-CONF when both files exist (e.g. BDM Assault for exFAT),
+	 * then fall back to BOOT. FAT-only drivers from BOOT with an exFAT stick attached
+	 * can hang at boot; see .agents/specs/USB_IRX_MATRIX.md. */
 	{
-		usbd_irx_path[2]++;
-		if (SifLoadModule(usbd_irx_path, 0, NULL) < 0) /**mc1:/BOOT/USBD.IRX*/
-		{
-			if (SifLoadModule(usbd_irx_path_sysconf, 0, NULL) < 0) /**mc0:/SYS-CONF/USBD.IRX*/
-			{
-				usbd_irx_path_sysconf[2]++;
-				SifLoadModule(usbd_irx_path_sysconf, 0, NULL); /**mc1:/SYS-CONF/USBD.IRX*/
-			}
-		}
-	}
-	/* **************************USBHDFSD.IRX************************************** */
-	if (SifLoadModule(usb_mass_irx_path, 0, NULL) < 0) /**mc0:/BOOT/USBHDFSD.IRX*/
-	{
-		usb_mass_irx_path[2]++;
-		if (SifLoadModule(usb_mass_irx_path, 0, NULL) < 0) /**mc1:/BOOT/USBHDFSD.IRX*/
-		{
-			if (SifLoadModule(usb_mass_irx_path_sysconf, 0, NULL) < 0) /**mc0:/SYS-CONF/USBHDFSD.IRX*/
-			{
-				usb_mass_irx_path_sysconf[2]++;
-				SifLoadModule(usb_mass_irx_path_sysconf, 0, NULL); /**mc1:/SYS-CONF/USBHDFSD.IRX*/
-			}
+		static const char *usb_pairs[][2] = {
+		    {"mc0:/SYS-CONF/USBD.IRX", "mc0:/SYS-CONF/USBHDFSD.IRX"},
+		    {"mc1:/SYS-CONF/USBD.IRX", "mc1:/SYS-CONF/USBHDFSD.IRX"},
+		    {"mc0:/BOOT/USBD.IRX", "mc0:/BOOT/USBHDFSD.IRX"},
+		    {"mc1:/BOOT/USBD.IRX", "mc1:/BOOT/USBHDFSD.IRX"},
+		};
+		int pi, loaded = 0;
+
+		for (pi = 0; pi < 4 && !loaded; pi++) {
+			char *usbd_p = (char *)usb_pairs[pi][0];
+			char *mass_p = (char *)usb_pairs[pi][1];
+
+			if (!file_exists(usbd_p) || !file_exists(mass_p))
+				continue;
+			if (SifLoadModule(usbd_p, 0, NULL) < 0)
+				continue;
+			if (SifLoadModule(mass_p, 0, NULL) < 0)
+				continue;
+			loaded = 1;
 		}
 	}
 }

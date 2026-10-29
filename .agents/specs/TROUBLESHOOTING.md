@@ -26,8 +26,18 @@ FunTuna arranca **FMCB (BOOT.ELF)** com atalhos opcionais (Circle/Cross); OpenTu
 
 ## CFG.ELF / USB
 
-- Freeze ao navegar `mass:/` no Configurator: drivers USB incompatíveis — pacote usa IRX oficiais (commit [b9e3d8f](https://github.com/israpps/Funtuna-Fork/commit/b9e3d8f4ff48df03c371a23702f78e8c52444e97)); não trocar por BDM em `BOOT/` sem validar.
+- Freeze ao navegar `mass:/` no Configurator: drivers USB incompatíveis — pacote usa IRX oficiais em `BOOT/` (commit [b9e3d8f](https://github.com/israpps/Funtuna-Fork/commit/b9e3d8f4ff48df03c371a23702f78e8c52444e97)); não substituir por BDM em `BOOT/` sem validar CFG.
 - OPL freeze pós-install: apagar configs antigos em `mc?:/OPL/` (installer já limpa se detectar layout pré-1.1.0).
+
+## BOOT.ELF / USB exFAT no arranque
+
+| Sintoma | Causa | Ação |
+|---------|--------|------|
+| Logo PS2 / FMCB **trava** com pen USB ligada | Stick **exFAT** (ou GPT) + drivers **FAT-only** de `mc?:/BOOT/` | Instalar [BDM Assault](https://github.com/israpps/BDMAssault) em `mc?:/SYS-CONF/USBD.IRX` e `USBHDFSD.IRX` ([guia BDM](https://github.com/israpps/BDMAssault#freemcboot)); `BOOT.ELF` passa a preferir SYS-CONF quando o par existe |
+| Boot OK sem USB, trava com USB | Idem ou `FUNTUNA.CNF` / lixo na raiz da pen | Testar pen vazia FAT32; depois exFAT + BDM |
+| Funciona se desligar USB antes do boot | Drivers carregados demasiado tarde ou path errado | Confirmar **dois** IRX em SYS-CONF; rebuild `BOOT.ELF` recente |
+
+Workaround imediato: desligar a pen até o menu OSD, ligar depois (não ideal para desgaste da porta).
 
 ## Ícone BXEXEC-FUNTUNA
 
@@ -39,7 +49,7 @@ OpenTuna/Fortuna **incompatível** com HDD-OSD ativo — pode bloquear reconheci
 
 ## exFAT
 
-Opcional via [BDM Assault](https://github.com/israpps/BDMAssault) em `SYS-CONF` (ver [USB_IRX_MATRIX.md](USB_IRX_MATRIX.md)). Não faz parte do build padrão deste fork.
+Opcional via [BDM Assault](https://github.com/israpps/BDMAssault) em **`SYS-CONF`** (recomendado; ver [USB_IRX_MATRIX.md](USB_IRX_MATRIX.md)). Substituir `BOOT/` por BDM só se CFG.ELF for testado. Não faz parte do build padrão deste fork.
 
 ## Build local
 
