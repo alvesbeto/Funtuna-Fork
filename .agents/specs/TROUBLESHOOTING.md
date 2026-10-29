@@ -6,8 +6,9 @@ Referências: [FunTuna FAQ](https://israpps.github.io/Funtuna-Fork/ASK-ENG.html)
 
 | Sintoma | Causa provável | Ação |
 |---------|----------------|------|
-| Browser branco / freeze ao abrir MC | Ícone para **outra** ROM (ex.: slim bin em FAT 1.10) | Reinstalar com **IconQuery** ou R2 auto; não reutilizar `slims.bin`/`fats.bin`/`170.bin` entre modelos |
+| Browser branco / freeze ao abrir MC | Ícone para **outra** ROM (ex.: slim bin em FAT 1.10) | Reinstalar com **IconQuery** (L2) ou R2 auto; ver [BIOS_ROM_MATRIX.md](BIOS_ROM_MATRIX.md); não reutilizar `slims.bin`/`fats.bin`/`170.bin` entre modelos |
 | MC “funciona” numa consola e trava noutra idêntica | BIOS/ROM diferente ou cartão preparado para outro modelo | Usar cartão só na consola alvo; ver [avisos OpenTuna](https://www.psx-place.com/threads/opentuna-an-open-source-version-of-fortuna-based-on-reverse-engineering.33010/) |
+| ROM `0x180`–`0x18F` com R2 auto e exploit falha | Instalador classifica como **FATS** (`>= 0x110`, `< 0x190`) | Testar **L2** ou ícone manual; registar no checklist hardware |
 | ProtoKernel SCPH-10000/15000 | OpenTuna **não suportado** | Installer omite `BXEXEC-OPENTUNA` (`UNSUPPORTED`); não forçar ícones |
 
 Regenerar ícones após mudar launcher:

@@ -12,7 +12,8 @@ Seções **1** e **3** em PROGRAM.md.
 
 ## Detalhe local
 
-- `installer/main.c` — tabela de blobs embedados
+- `installer/main.c` — tabela de blobs embedados; `GetIconType()` + `rom0:ROMVER` (ver [../BIOS_ROM_MATRIX.md](../BIOS_ROM_MATRIX.md))
 - `installer/ERROR_MESSAGES/*`
+- QA offline: `tools/inspect-ps2-bios-dump.sh`
 
 **Status:** aguardando aprovação do programa antes de implementação.

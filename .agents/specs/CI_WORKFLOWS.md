@@ -65,3 +65,4 @@ Atualização: substituir ficheiros em `INSTALLER_CONTENTS/OPL/`, rebuild instal
 - [ ] Após bump de embeds: `tools/build-release-local.sh` local OK
 - [ ] `workflow_dispatch` → `stable.yml` produz zip com três variantes BOOT sincronizadas
 - [ ] `repack-and-release.yml` produz `FunTuna-Fork_Installer.ELF` + 7z
+- [ ] (Opcional) Dumps BIOS de referência: `tools/inspect-ps2-bios-dump.sh` alinhado a [BIOS_ROM_MATRIX.md](BIOS_ROM_MATRIX.md)

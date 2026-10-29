@@ -88,7 +88,7 @@ Runbook: [RELEASE_RUNBOOK.md](RELEASE_RUNBOOK.md). Workflows: [CI_WORKFLOWS.md](
 ## Testes
 
 - **Automated:** clang-format CI; file-existence no stable workflow.
-- **Manual obrigatório:** matriz hardware (slim/fat/fat170), matriz USB IRX, matriz estados installer — registrar resultados no PR (tabela markdown).
+- **Manual obrigatório:** matriz hardware (slim/fat/fat170), [BIOS_ROM_MATRIX.md](BIOS_ROM_MATRIX.md), matriz USB IRX, matriz estados installer — registrar resultados no PR (tabela markdown).
 
 ---
 

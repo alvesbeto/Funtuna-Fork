@@ -19,9 +19,15 @@ Preencher no PR que alterar `opentuna/` ou `installer/INSTALLER_CONTENTS/ENTRYPO
 
 ## Hardware (marcar console testado)
 
-| Modelo / ROM | SLIMS / FATS / FAT170 | Boot exploit | ULE | OPL | Notas |
-|--------------|----------------------|--------------|-----|-----|-------|
-| | | | | | |
+Referência ROM → ícone: [BIOS_ROM_MATRIX.md](BIOS_ROM_MATRIX.md). Sanity-check offline: `tools/inspect-ps2-bios-dump.sh`.
+
+| Modelo / ROM (`rom0:ROMVER`) | SLIMS / FATS / FAT170 | Boot exploit | ULE | OPL | Notas |
+|------------------------------|----------------------|--------------|-----|-----|-------|
+| SCPH-10000 `0100` (proto) | N/A (UNSUPPORTED) | | | | Sem OpenTuna |
+| SCPH-39001 ~`0160` / 30004R PAL | FATS | | | | |
+| SCPH-70004 V12 ~`0200` PAL | SLIMS | | | | |
+| ROM `0170` | FAT170 | | | | *Não coberto pelo pack QA local* |
+| ROM `0180`–`018F` | FATS (auto) | | | | Validar se R2 falhar → L2 / RLE |
 | | | | | | |
 
 ## Installer embed

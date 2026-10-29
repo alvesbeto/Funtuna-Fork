@@ -9,6 +9,7 @@
 - `PS2SDKSRC` apontando para `ps2sdk-src` (IOP `init` / `elf_loader`)
 - Opcional: `wine` para `ps2_packer` nos Makefiles
 - Host: `tools/install-ps2dev-host-tools.sh` (`bin2s`, symlink `lzma-packer.so`)
+- Opcional QA BIOS offline: `tools/inspect-ps2-bios-dump.sh` — ver [BIOS_ROM_MATRIX.md](BIOS_ROM_MATRIX.md)
 
 ## Git vs artefatos
 
