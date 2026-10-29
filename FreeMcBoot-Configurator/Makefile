@@ -5,13 +5,15 @@ EE_OBJS = main.o pad.o config.o elf.o draw.o loader.o  filer.o\
 	font_uLE.o
 
 EE_INCS := -I$(PS2DEV)/gsKit/include -I$(PS2DEV)/libjpg/include\
-	-I$(PS2SDKOLD)/sbv/include -I$(PS2DEVOLD)/libcdvd/ee
+	-I$(PS2SDK)/sbv/include
 
 EE_LDFLAGS := -L$(PS2DEV)/gsKit/lib -L$(PS2DEV)/libjpg\
-	-L$(PS2SDKOLD)/sbv/lib -L$(PS2DEVOLD)/libcdvd/lib -s
-EE_LIBS = -lpad -lgskit -ldmakit -lmc -lmf -lpatches -ldebug -lc
+	-L$(PS2SDK)/sbv/lib -s
+EE_LIBS = -lpad -lgskit -ldmakit -lmc -lpatches -ldebug -lc
 
-all: $(EE_BIN)
+EE_CFLAGS += -DNEWLIB_PORT_AWARE
+
+all: $(EE_BIN_PACKED)
 	@echo "================ Compiling FreeMcBoot-Configurator ==============="
 
 	
@@ -21,12 +23,14 @@ run: comp
 reset: clean
 	ps2client -h 192.168.1.4 reset
 $(EE_BIN_PACKED): $(EE_BIN)
-	../tools/ps2_packer/ps2_packer.exe -v $< $@
-
-compressed: $(EE_BIN)
 	@echo "--------------- PS2Packer ---------------"
-	../tools/ps2_packer/ps2_packer.exe $(EE_BIN) $(EE_BIN_PACKED)
-	@echo "---------------"
+	@if command -v ps2-packer >/dev/null 2>&1; then \
+		cd "$(PS2DEV)/share/ps2-packer" && ps2-packer "$(CURDIR)/$<" "$(CURDIR)/$@"; \
+	else \
+		wine ../tools/ps2_packer/ps2_packer.exe -v $< $@; \
+	fi
+
+compressed: $(EE_BIN_PACKED)
 loader.s:
 	@echo "--------------- compiling ELF loader ---------------"
 	@$(MAKE) -C loader >nul

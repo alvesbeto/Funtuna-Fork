@@ -1,6 +1,8 @@
 #ifndef LAUNCHELF_H
 #define LAUNCHELF_H
 
+#include "funtuna_io_compat.h"
+
 #include <stdio.h>
 #include <tamtypes.h>
 #include <sifcmd.h>
@@ -33,7 +35,7 @@
 #include "iopmod_name.h"
 //#include <libjpg.h>
 //#include <libkbd.h>
-#include <floatlib.h>
+//#include <floatlib.h> /* legacy; use math.h if needed */
 //#include "hdl_rpc.h"
 
 #define TRUE 1
@@ -199,6 +201,7 @@ void setScrTmp(const char *msg0, const char *msg1);
 //void drawSprite( u64 color, int x1, int y1, int x2, int y2 );
 void drawPopSprite(u64 color, int x1, int y1, int x2, int y2);
 void drawOpSprite(u64 color, int x1, int y1, int x2, int y2);
+void drawSprite(u64 color, int x1, int y1, int x2, int y2);
 void drawMsg(const char *msg);
 //void drawLastMsg(void);
 void setupGS(int gs_vmode);

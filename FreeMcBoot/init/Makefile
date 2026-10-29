@@ -9,7 +9,7 @@
 # $Id: Makefile 577 2004-09-14 14:41:46Z pixel $
 
 
-IOP_OBJS_DIR = ./
+IOP_OBJS_DIR = obj/
 IOP_BIN_DIR = ./
 IOP_SRC_DIR = ./
 IOP_INC_DIR = ./
@@ -19,11 +19,12 @@ IOP_OBJS = init.o imports.o
 
 IOP_CFLAGS  +=  -fno-builtin -G0 -O2 
 IOP_LDFLAGS += -s
+IOP_INCS += -I$(PS2SDK)/iop/include -I$(PS2SDK)/common/include
 
-all: $(IOP_OBJS_DIR) $(IOP_BIN_DIR) $(IOP_BIN) copy
+all: $(IOP_BIN) copy
 
 clean:
-	rm -f -r $(IOP_OBJS) $(IOP_BIN)
+	rm -f -r obj $(IOP_OBJS) $(IOP_BIN) build-imports.c template-imports.h
 
 copy:
 	cp init.irx ../init.irx

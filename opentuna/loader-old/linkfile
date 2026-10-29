@@ -1,0 +1,27 @@
+OUTPUT_ARCH(mips:5900)
+ENTRY(main)
+
+SECTIONS
+{
+	. = 0x90000;
+
+	.text : {
+		*(.text .text.*)
+		*(.init .fini)
+	}
+
+	.rodata : {
+		*(.rodata .rodata.*)
+	}
+
+	.data : {
+		*(.data .data.*)
+		*(.ctors .dtors .jcr)
+	}
+
+	.bss : {
+		*(.sbss .sbss.*)
+		*(.bss .bss.*)
+		*(COMMON)
+	}
+}

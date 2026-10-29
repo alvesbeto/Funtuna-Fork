@@ -515,7 +515,7 @@ void sort(FILEINFO *a, int left, int right)
 //--------------------------------------------------------------
 int readMC(const char *path, FILEINFO *info, int max)
 {
-	static mcTable mcDir[MAX_ENTRY] __attribute__((aligned(64)));
+	static sceMcTblGetDir mcDir[MAX_ENTRY] __attribute__((aligned(64)));
 	char dir[MAX_PATH];
 	int i, j, ret;
 
@@ -529,15 +529,30 @@ int readMC(const char *path, FILEINFO *info, int max)
 
 	strcpy(dir, &path[4]);
 	strcat(dir, "*");
-	mcGetDir(path[2] - '0', 0, dir, 0, MAX_ENTRY - 2, (mcTable *)mcDir);
+	mcGetDir(path[2] - '0', 0, dir, 0, MAX_ENTRY - 2, mcDir);
 	mcSync(0, NULL, &ret);
 
 	for (i = j = 0; i < ret; i++) {
-		if (mcDir[i].attrFile & MC_ATTR_SUBDIR &&
-		    (!strcmp(mcDir[i].name, ".") || !strcmp(mcDir[i].name, "..")))
+		if (mcDir[i].AttrFile & MC_ATTR_SUBDIR &&
+		    (!strcmp((char *)mcDir[i].EntryName, ".") || !strcmp((char *)mcDir[i].EntryName, "..")))
 			continue;  //Skip pseudopaths "." and ".."
-		strcpy(info[j].name, mcDir[i].name);
-		info[j].stats = mcDir[i];
+		strcpy(info[j].name, (char *)mcDir[i].EntryName);
+		clear_mcTable(&info[j].stats);
+		info[j].stats.attrFile = mcDir[i].AttrFile;
+		info[j].stats.fileSizeByte = mcDir[i].FileSizeByte;
+		info[j].stats._create.sec = mcDir[i]._Create.Sec;
+		info[j].stats._create.min = mcDir[i]._Create.Min;
+		info[j].stats._create.hour = mcDir[i]._Create.Hour;
+		info[j].stats._create.day = mcDir[i]._Create.Day;
+		info[j].stats._create.month = mcDir[i]._Create.Month;
+		info[j].stats._create.year = mcDir[i]._Create.Year;
+		info[j].stats._modify.sec = mcDir[i]._Modify.Sec;
+		info[j].stats._modify.min = mcDir[i]._Modify.Min;
+		info[j].stats._modify.hour = mcDir[i]._Modify.Hour;
+		info[j].stats._modify.day = mcDir[i]._Modify.Day;
+		info[j].stats._modify.month = mcDir[i]._Modify.Month;
+		info[j].stats._modify.year = mcDir[i]._Modify.Year;
+		strncpy((char *)info[j].stats.name, info[j].name, 32);
 		j++;
 	}
 

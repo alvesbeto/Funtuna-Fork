@@ -1,6 +1,5 @@
 //we don't need most of this... just standard headers
 #include <types.h>
-#include <stdio.h>
 #include <sysclib.h>
 #include <thbase.h>
 #include <thsemap.h>

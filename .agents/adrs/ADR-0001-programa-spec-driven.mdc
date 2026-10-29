@@ -1,0 +1,37 @@
+---
+description: Programa hardening aprovado — Fase A launcher, installer pre-flight, runbooks e manifesto de embeds.
+status: accepted
+date: 2026-10-28
+---
+
+# ADR-0001 — Programa spec-driven Funtuna-Fork (implementação inicial)
+
+## Contexto
+
+O programa em `.agents/specs/PROGRAM.md` foi aprovado pelo product owner. O repositório não usa stack Laravel; specs e ADRs ficam em `.agents/`. PS2SDK não está disponível no ambiente de CI local do agente — entrega combina correções de código, documentação verificável e scripts para rebuild manual.
+
+## Decisão
+
+1. **Fase A:** Corrigir path `mc1:/BOOT/ULE.ELF` no launcher com launch keys (`opentuna/launcher-keys-Funtuna/main.c`).
+2. **Fase C:** Mover checagem `NOT_ENOUGH_SPACE` antes do cleanup destrutivo; remover bloco `FOUND_*` pós-cleanup (código morto após delete de pastas). Documentar upgrade destrutivo em `INSTALLER_STATE_MATRIX.md`.
+3. **Operacional:** Adicionar `tools/build-opentuna-launcher.sh`, `tools/sync-installer-manifest.sh`, manifest SHA-256, checklists/matrizes e `RELEASE_RUNBOOK.md`.
+4. **Fase B/D:** Documentar matriz USB e escopo do Configurator (sem alteração de código — comportamento já em `launcher2.c`).
+
+## Consequências
+
+- Usuários com ULE só em `mc1` e Cross pressionado passam a carregar o ELF correto.
+- Instalação falha por espaço antes de apagar pastas na MC.
+- Rebuild de Opentuna/installer continua dependente de PS2SDK no maintainer.
+
+## Validação
+
+- Revisão estática de `main.c` e launcher.
+- Manifest gerado em `.agents/specs/manifests/installer-content.sha256`.
+- Hardware: pendente checklist em `STABILITY_CHECKLIST.md`.
+
+## Arquivos e termos relacionados
+
+- `opentuna/launcher-keys-Funtuna/main.c`
+- `installer/main.c`
+- `.agents/specs/PROGRAM.md`, `STABILITY_CHECKLIST.md`, `USB_IRX_MATRIX.md`, `INSTALLER_STATE_MATRIX.md`, `RELEASE_RUNBOOK.md`
+- `tools/build-opentuna-launcher.sh`, `tools/sync-installer-manifest.sh`

@@ -8,6 +8,7 @@
 
 #include "launchelf.h"
 #include <stdbool.h>
+#include <stdlib.h>
 #include <libmc.h>
 //#include "libmc-common.h"
 enum {
@@ -3363,9 +3364,9 @@ void Config_fmcb_OSDSYS_scroll()
 				if (s == 6)
 					strcpy(fmcb->OSD_cursor[1], "o008");
 				if (s == 7)
-					strcpy(fmcb->OSD_delimiter[0], "y-99r0.00FunTuna  r0.60c1[r0.60Free McBoot v1.8 for Fortunar0.60]y-00");
+					strcpy(fmcb->OSD_delimiter[0], "y-99r0.00FunTuna  r0.60c1[r0.60 v1.0.0r0.60]y-00");
 				if (s == 8)
-					strcpy(fmcb->OSD_delimiter[1], "c0r0.60y+99Howling Wolf & Chelseay-00r0.00");
+					strcpy(fmcb->OSD_delimiter[1], "c0r0.60y+99 based on FreeMcBoot 1.0 y-00r0.00");
 			} else if (new_pad & PAD_TRIANGLE) {
 			return_fmcb:
 				free(tmpfmcb);

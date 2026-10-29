@@ -36,10 +36,10 @@ EE_BIN_PACKED = BOOT.ELF
 EE_BIN_STRIPPED = BOOT-STRIPPED.ELF
 
 EE_INCS = -I$(PS2SDK)/ee/include -I$(PS2SDK)/common/include -I$(PS2SDK)/sbv/include
-EE_LDFLAGS = -nostartfiles -Tlinkfile -L$(PS2SDK)/sbv/lib -L. -Lelf_loader/lib -s 
-EE_LIBS = -ldebug -lcdvd -lpad -lpatches -lc -lkernel -lelf_loader 
+EE_LDFLAGS = -nostartfiles -Tlinkfile -L$(PS2SDK)/sbv/lib -L. -Lelf_loader/lib -s
+EE_LIBS = -ldebug -lcdvd -lpad -lpatches -lcglue -lc -lkernel -lelf_loader
 
-EE_OBJS = launcher2.o gs.o chkesr_rpc.o chkesr.o pad.o timer.o iomanx.o init.o dma_asm.o gs_asm.o ps2_asm.o elf_loader.o #usbhdfsd.o usbd.o 
+EE_OBJS = ps2sdk_crt_stubs.o launcher2.o gs.o chkesr_rpc.o chkesr.o pad.o timer.o iomanx.o init.o dma_asm.o gs_asm.o ps2_asm.o elf_loader.o #usbhdfsd.o usbd.o
 
 
 all:
@@ -55,7 +55,11 @@ $(EE_BIN_STRIPPED): $(EE_BIN)
 	
 $(EE_BIN_PACKED): $(EE_BIN_STRIPPED)
 	@echo "--------------- PS2-Packer ---------------"
-	../tools/ps2_packer/ps2_packer.exe -v $< $@
+	@if command -v ps2-packer >/dev/null 2>&1; then \
+		cd "$(PS2DEV)/share/ps2-packer" && ps2-packer "$(CURDIR)/$<" "$(CURDIR)/$@"; \
+	else \
+		wine ../tools/ps2_packer/ps2_packer.exe -v $< $@; \
+	fi
 
 clean:
 	@echo "="

@@ -346,6 +346,10 @@ static int install(int mcport, int icon_variant)
 	mcSync(0, NULL, &ret);
 	if (ret != -1){return NO_MEMORY_CARD;}
 	if (mc_Type != 2){return NO_PS2_MEMORY_CARD;}
+	if (mc_Free < 2000){return NOT_ENOUGH_SPACE;}
+
+	/* Destructive upgrade after user confirmed install (see INSTALLER_STATE_MATRIX).
+	 * Do not return FOUND_* here: legacy trees are removed intentionally. */
 	//  CLEANUP
 	sprintf(temp_path,"mc%u:BOOT", mcport);
 		DeleteFolder(temp_path);
@@ -374,25 +378,6 @@ static int install(int mcport, int icon_variant)
 	DeleteFolder(temp_path);
 	}
 	// /CLEANUP
-	//If there's no free space, we have an error:
-	if (mc_Free < 2000){return NOT_ENOUGH_SPACE;}//Installation actually requires less than this (something like 1.6MB), but i left a larger size for space check since OPL will create settings and icon files on first launch... (and users will innevitally load more files)
-
-	//If the files exists, we have an error:
-	if (mcport == 0) {
-	if (file_exists("mc0:/BXEXEC-OPENTUNA/icon.icn")) {return FUNTUNA_FORK_FOUND;}
-	if (file_exists("mc0:/BXEXEC-OPENTUNA/icon.sys")) {return FUNTUNA_FORK_FOUND;}
-	if (file_exists("mc0:/BXEXEC-FUNTUNA/icon.icn"))  {return FUNTUNA_FORK_FOUND;}
-	if (file_exists("mc0:/BXEXEC-FUNTUNA/icon.sys"))  {return FUNTUNA_FORK_FOUND;}
-	if (file_exists("mc0:/OPENTUNA/icon.sys"))        {return OPENTUNA_FOUND;}
-	if (file_exists("mc0:/FORTUNA/icon.sys"))         {return FORTUNA_FOUND;}
-	} else {
-	if (file_exists("mc1:/BXEXEC-OPENTUNA/icon.icn")) {return FUNTUNA_FORK_FOUND;}
-	if (file_exists("mc1:/BXEXEC-OPENTUNA/icon.sys")) {return FUNTUNA_FORK_FOUND;}
-	if (file_exists("mc1:/BXEXEC-FUNTUNA/icon.icn"))  {return FUNTUNA_FORK_FOUND;}
-	if (file_exists("mc1:/BXEXEC-FUNTUNA/icon.sys"))  {return FUNTUNA_FORK_FOUND;}
-	if (file_exists("mc1:/OPENTUNA/icon.sys"))        {return OPENTUNA_FOUND;}
-	if (file_exists("mc1:/FORTUNA/icon.sys"))         {return FORTUNA_FOUND;}
-	}
 	//FOLDERS
 	scr_printf("\tCreating Folders...\n");
 	scr_printf("\t\tBOOT\n");
@@ -644,22 +629,22 @@ int main (int argc, char *argv[])
 	
 	int fdn, icontype;
 	unsigned long int ROM_VERSION;
-	char romver[5];
+	char romver[6];
 	VMode = NTSC;
 
 	// Loads Needed modules
 	InitPS2();
 
 	gs_reset(); // Reset GS
-	if ((fdn = open("rom0:ROMVER", O_RDONLY)) > 0) // Reading ROMVER
+	if ((fdn = open("rom0:ROMVER", O_RDONLY)) > 0)
 	{
-		read(fdn, romver, 4);
+		read(fdn, romver, 5);
 		close(fdn);
+		romver[5] = '\0';
 
 		if (romver[4] == 'E')
 			VMode = PAL;
-		romver[4] = '\0';
-		ROM_VERSION = strtoul(romver, NULL, 16); //convert ROM version to unsigned long int for further use on automatic Install
+		ROM_VERSION = strtoul(romver, NULL, 16);
 	}
 
 	if (VMode == PAL)

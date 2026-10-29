@@ -1,18 +1,262 @@
-__Release/**/desktop.ini
-__Experimental/**/desktop.ini
-__STABLE/**/desktop.ini
-**/desktop.ini
+# Created by https://www.toptal.com/developers/gitignore/api/windows,linux,macos,backup,c,visualstudiocode
+# Edit at https://www.toptal.com/developers/gitignore?templates=windows,linux,macos,backup,c,visualstudiocode
 
-FreeMcBoot/launcher2.elf.BAK
-**.lnk
+### Backup ###
+*.bak
+*.gho
+*.ori
+*.orig
+*.tmp
 
-installer/**.o
-installer/**.s
+### C ###
+# Prerequisites
+*.d
 
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Linker output
+*.ilk
+*.map
+*.exp
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
+
+### Linux ###
+*~
+
+# temporary files which can be created if a process still has a handle open of a deleted file
+.fuse_hidden*
+
+# KDE directory preferences
+.directory
+
+# Linux trash folder which might appear on any partition or disk
+.Trash-*
+
+# .nfs files are created when an open file is removed but is still being accessed
+.nfs*
+
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+### macOS Patch ###
+# iCloud generated files
+*.icloud
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+.ionide
+
+### Windows ###
+# Windows thumbnail cache files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+
+# Dump file
+*.stackdump
+
+# Folder config file
+[Dd]esktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# End of https://www.toptal.com/developers/gitignore/api/windows,linux,macos,backup,c,visualstudiocode
+
+# =============================================================================
+# Funtuna-Fork — PS2 / release (não coberto pelo bloco Toptal acima)
+# Rebuild: tools/bootstrap-installer-vendor.sh + tools/build-release-local.sh
+# =============================================================================
+
+analysis/
+
+# Make no Windows (redireção >nul)
+**/nul
+
+**/*.erl
+**/obj/
+
+# bin2s / asm gerado (manter *.S / crt0.s escritos à mão)
+**/*.s
+!**/dma_asm.S
+!**/gs_asm.S
+!**/ps2_asm.S
+!**/crt0.s
+
+# PS2 (.ELF maiúsculo; *.elf minúsculo já está no template C acima)
+**/*.ELF
+**/*-packed.elf
+**/*-stripped.elf
+**/*-STRIPPED.ELF
+**/*-UNC.ELF
+**/*.irx
+**/*.IRX
+
+# Vendor sem build neste repo (mantidos no git)
+!installer/INSTALLER_CONTENTS/BOOT/POWEROFF.ELF
+
+# Payloads Opentuna / exploit
+opentuna/exploit/payload.bin
+opentuna/exploit/payload.elf
+opentuna/**/payload-stripped.elf
+installer/INSTALLER_CONTENTS/ENTRYPOINT/exploit.sys
+installer/INSTALLER_CONTENTS/ENTRYPOINT/*.bin
+
+# Recursos do empacotador OpenTuna RLE (não são saída de make)
+!tools/OpenTuna RLE/res/*.bin
+
+# FreeMcBoot (IOP embeds + raiz)
+FreeMcBoot/*.irx
+FreeMcBoot/*.IRX
+FreeMcBoot/init.irx
+FreeMcBoot/chkesr.irx
+FreeMcBoot/init/init.irx
+FreeMcBoot/chkesr/chkesr.irx
+FreeMcBoot/elf_loader/lib/
+FreeMcBoot/elf_loader/obj/
+
+# Configurator: cópias locais do ps2_packer (preferir ps2-packer do PS2DEV)
+FreeMcBoot-Configurator/ps2_packer.exe
+FreeMcBoot-Configurator/ps2_packer/ps2_packer.exe
+
+# Installer: link + bin2s
 installer/FunTuna-Fork_Installer.ELF
 installer/Installer.elf
 installer/stripped.elf
+installer/FMCB_ELF.s
+installer/CFG_ELF.s
+installer/opl_elf.s
+installer/ule_elf.s
+installer/apps_icn.s
+installer/apps_sys.s
+installer/poweroff_elf.s
+installer/FUNTUNA_USBHDFSD.s
+installer/FUNTUNA_USBD.s
+installer/ule_cnf.s
+installer/boot_sys.s
+installer/boot_icn.s
+installer/exploit_sys.s
+installer/exploit_bin.s
+installer/FMCB_CNF.s
+installer/OpenTuna_SLIMS.s
+installer/OpenTuna_FAT-170.s
+installer/OpenTuna_FAT-110-120-150-160.s
+installer/opl_icn.s
+installer/opl_sys.s
+installer/opl_cfg.s
+installer/opl_cfg1.s
+installer/opl_dualshock.s
 
-!**dma_asm.S
-!**gs_asm.S
-!**ps2_asm.S
+# Embeds reconstruíveis (vendor: tools/bootstrap-installer-vendor.sh)
+installer/INSTALLER_CONTENTS/BOOT/BOOT.ELF
+installer/INSTALLER_CONTENTS/BOOT/CFG.ELF
+installer/INSTALLER_CONTENTS/BOOT/ULE.ELF
+installer/INSTALLER_CONTENTS/BOOT/USBD.IRX
+installer/INSTALLER_CONTENTS/BOOT/USBHDFSD.IRX
+installer/INSTALLER_CONTENTS/APPS/OPNPS2LD.ELF
+
+# Staging de release (tools/prepare-release-variants.sh)
+__Binaries/*
+!__Binaries/README.MD
+
+__Release/!Funtuna-*/BOOT/
+__Release/ULE_psu.ELF
+
+# Manifesto gerado
+.agents/specs/manifests/installer-content.sha256
+
+tools/ps2_packer/ps2_packer.exe

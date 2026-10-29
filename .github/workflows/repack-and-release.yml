@@ -20,16 +20,24 @@ jobs:
     
     - name: Install dependencies
       run: |
-        apk add build-base git zip p7zip
+        apk add build-base git zip p7zip wget
 
     - name: checkout code for release
       uses: actions/checkout@v1
       
-    - name: Update wLaunchELF_ISR
+    - name: Vendor + FMCB embeds
       run: |
-         wget https://github.com/israpps/wLaunchELF_ISR/releases/download/latest/BOOT-DS34.ELF -O installer/INSTALLER_CONTENTS/BOOT/ULE.ELF
-         wget https://github.com/israpps/wLaunchELF_ISR/releases/download/latest/BOOT-DS34.ELF -O __Release/ULE_psu.ELF
-    
+        chmod +x tools/*.sh
+        export PS2SDKSRC="${PS2SDKSRC:-/usr/local/ps2sdk}"
+        export VENDOR_REFRESH=1
+        tools/bootstrap-installer-vendor.sh
+        cp installer/INSTALLER_CONTENTS/BOOT/ULE.ELF __Release/ULE_psu.ELF
+        make -C FreeMcBoot clean all
+        make -C FreeMcBoot-Configurator clean all
+        cp FreeMcBoot/BOOT.ELF installer/INSTALLER_CONTENTS/BOOT/BOOT.ELF
+        cp FreeMcBoot-Configurator/CFG.ELF installer/INSTALLER_CONTENTS/BOOT/CFG.ELF
+        BUILD_OPENTUNA=1 tools/build-opentuna-launcher.sh || true
+
     - name: build installer
       run: |
         cd installer
@@ -39,7 +47,7 @@ jobs:
     - name: prepare Release package
       run: |
         SCH=${GITHUB_SHA::7}
-        cp installer/Installer.elf __Release/FunTuna-Fork_installer-$SCH.ELF
+        cp installer/FunTuna-Fork_Installer.ELF __Release/FunTuna-Fork_installer-$SCH.ELF
         cp -r installer/INSTALLER_CONTENTS/BOOT/ __Release/MANUAL_INSTALL/BOOT/
         cp -r installer/INSTALLER_CONTENTS/APPS/ __Release/MANUAL_INSTALL/APPS/
         cp -r installer/INSTALLER_CONTENTS/OPL/ __Release/MANUAL_INSTALL/OPL/

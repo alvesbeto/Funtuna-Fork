@@ -111,7 +111,11 @@ $(EE_BIN_STRIPPED): $(EE_BIN)
 	$(EE_STRIP) -o $@ $<
 
 $(EE_BIN_PACKED): $(EE_BIN_STRIPPED)
-	ps2-packer $< $@ > /dev/null
+	@if command -v ps2-packer >/dev/null 2>&1; then \
+		cd "$(PS2DEV)/share/ps2-packer" && ps2-packer "$(CURDIR)/$<" "$(CURDIR)/$@"; \
+	else \
+		ps2-packer $< $@ > /dev/null; \
+	fi
 
 include $(PS2SDK)/samples/Makefile.pref
 include $(PS2SDK)/samples/Makefile.eeglobal

@@ -1,0 +1,37 @@
+OUTPUT_ARCH(mips:5900)
+ENTRY(main)
+
+SECTIONS
+{
+	. = 0x00100000;
+
+	.text : {
+		*(.text .text.*)
+		*(.init .fini)
+	}
+
+	.ctors ALIGN(16): { KEEP(*(.ctors)) }
+	.dtors ALIGN(16): { KEEP(*(.dtors)) }
+
+	.rodata : {
+		*(.rodata .rodata.*)
+	}
+
+	.data : {
+		*(.data .data.*)
+		*(.ctors .dtors)
+	}
+
+	.sdata : {
+		*(.sbss .sbss.*)
+		*(.sdata .sdata.*)
+	}
+
+	.bss : {
+		*(.bss .bss.*)
+		*(COMMON)
+	}
+
+	_end = .;
+	PROVIDE(end = .);
+}

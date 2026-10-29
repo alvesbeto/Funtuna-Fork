@@ -44,6 +44,9 @@
 #include <tamtypes.h>
 #include <kernel.h>
 #include <sifrpc.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <stdlib.h>
 #include <fileio.h>
 #include <iopcontrol.h>
 #include <iopheap.h>
@@ -52,8 +55,8 @@
 #include <libpad.h>
 #include <string.h>
 #include <stdio.h>
-#include <osd_config.h>
 #include <libcdvd.h>
+#include <osd_config.h>
 #include <malloc.h>
 #include <debug.h>
 #include "splash.h"
@@ -476,7 +479,7 @@ int loadConfig(void)
 		//scr_printf("\t dummy_p: %08x\n", (u32)dummy_p);
 	}
 
-	CNF_RAM_p = (char *)malloc(CNF_size);
+	CNF_RAM_p = (char *)malloc(CNF_size + 1);
 	//scr_printf("\n\t CNF_RAM_p: %08x\n", (u32)CNF_RAM_p);
 
 	if (dummy_p != NULL) {
@@ -710,7 +713,7 @@ int Read_SYSTEM_CNF(char *boot_path, char *ver)
 
 	CNF_size = lseek(fd, 0, SEEK_END);
 	lseek(fd, 0, SEEK_SET);
-	RAM_p = (char *)malloc(CNF_size);
+	RAM_p = (char *)malloc(CNF_size + 1);
 	CNF_p = RAM_p;
 	if (CNF_p == NULL) {
 		close(fd);
@@ -1950,7 +1953,7 @@ void CleanUp(int iop_reset)
 			padPortClose(0, 0);
 			padPortClose(1, 0);
 			padEnd();
-			padReset();
+			padEnd();
 			pad_inited = 0;
 		}
 	}
@@ -2391,7 +2394,7 @@ void check_ESR_paths(void)
 int FastBoot_Disc(void)
 {
 	// Boot an identified disc in the tray
-	CdvdDiscType_t cdmode;
+	enum SCECdvdMediaType cdmode;
 	char *args[3];
 	char ver[MAX_PATH];
 	int i;
@@ -2476,26 +2479,29 @@ void Set_Default_Settings(void)
 	// Loads Needed OSDSYS and FMCB defaults
 	int i, j;
 
-	OSDSYS.hack_enabled = 0;
-	OSDSYS.skip_mc = 0;
-	OSDSYS.skip_hdd = 0;
-	OSDSYS.skip_disc = 0;
+	/* Keep in sync with initFmcbCNF() defaults in FreeMcBoot-Configurator/config.c */
+	OSDSYS.hack_enabled = 1;
+	OSDSYS.skip_mc = 1;
+	OSDSYS.skip_hdd = 1;
+	OSDSYS.skip_disc = 1;
 	OSDSYS.skip_logo = 1;
 	OSDSYS.goto_inner_browser = 0;
 	OSDSYS.video_mode = "AUTO";
 	OSDSYS.scroll_menu = 1;
 	OSDSYS.menu_x = 320;
 	OSDSYS.menu_y = 110;
-	OSDSYS.enter_x = 30;
+	OSDSYS.enter_x = -1;
 	OSDSYS.enter_y = -1;
 	OSDSYS.version_x = -1;
 	OSDSYS.version_y = -1;
 	OSDSYS.cursor_max_velocity = 1000;
 	OSDSYS.cursor_acceleration = 100;
-	OSDSYS.left_cursor = ">>";
-	OSDSYS.right_cursor = "<<";
-	OSDSYS.menu_top_delimiter = "------=/\\=------";
-	OSDSYS.menu_bottom_delimiter = "------=\\/=------";
+	OSDSYS.left_cursor = "\ao009";
+	OSDSYS.right_cursor = "\ao008";
+	OSDSYS.menu_top_delimiter =
+	    "\ay-99\ar0.00FunTuna  \ar0.60\ac1[\ar0.60 v1.0.0\ar0.60]\ay-00";
+	OSDSYS.menu_bottom_delimiter =
+	    "\ac0\ar0.60\ay+99 based on FreeMcBoot 1.0 \ay-00\ar0.00";
 	OSDSYS.selected_color[0] = 0x10;
 	OSDSYS.selected_color[1] = 0x80;
 	OSDSYS.selected_color[2] = 0xe0;
@@ -2511,7 +2517,7 @@ void Set_Default_Settings(void)
 			OSDSYS.item_path[i][j] = NULL;
 	}
 
-	FMCB.pad_delay = 1000;
+	FMCB.pad_delay = 0; /* match initFmcbCNF(); CNF overrides when loaded */
 	FMCB.debug_screen = 0;
 	FMCB.fastboot = 0;
 	FMCB.autolaunch_patch = 1;

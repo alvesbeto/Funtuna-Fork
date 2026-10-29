@@ -26,6 +26,7 @@
 ==											==
 ==================================================================*/
 #include "tamtypes.h"
+#include "../funtuna_io_compat.h"
 #include "debug.h"
 #include "kernel.h"
 #include "sifrpc.h"
@@ -91,7 +92,7 @@ typedef struct
 //--------------------------------------------------------------
 t_ExecData elfdata;
 
-int fileMode =  FIO_S_IRUSR | FIO_S_IWUSR | FIO_S_IXUSR | FIO_S_IRGRP | FIO_S_IWGRP | FIO_S_IXGRP | FIO_S_IROTH | FIO_S_IWOTH | FIO_S_IXOTH;
+int fileMode = FIO_S_IRUSR | FIO_S_IWUSR | FIO_S_IXUSR | FIO_S_IRGRP | FIO_S_IWGRP | FIO_S_IXGRP | FIO_S_IROTH | FIO_S_IWOTH | FIO_S_IXOTH;
 char HDDpath[256];
 char partition[128];
 

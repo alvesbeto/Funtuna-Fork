@@ -70,9 +70,9 @@ typedef struct
 	u16 psm;
 	u16 bpp;
 	u16 magh;
-} vmode_t __attribute__((aligned(16)));
+} vmode_t;
 
-vmode_t vmodes[] = {
+vmode_t vmodes[] __attribute__((aligned(16))) = {
     {PAL, 640, 512, 0, 32, 4},
     {NTSC, 640, 448, 0, 32, 4}};
 
