@@ -19,10 +19,20 @@ make -C "${ROOT}/opentuna/${PAYLOAD}" clean all
 echo "==> Building exploit embed (payload.bin)"
 make -C "${ROOT}/opentuna/exploit" all
 
-echo "Built: opentuna/exploit/payload.bin"
-echo ""
-echo "ENTRYPOINT icons (slims.bin, fats.bin, 170.bin) use per-model OpenTuna builds."
-echo "After producing each .bin, copy into:"
-echo "  installer/INSTALLER_CONTENTS/ENTRYPOINT/"
-echo "Then run: tools/sync-installer-manifest.sh"
-echo "Then rebuild installer: make -C installer clean all"
+ENTRY="${ROOT}/installer/INSTALLER_CONTENTS/ENTRYPOINT"
+mkdir -p "${ENTRY}"
+cp "${ROOT}/opentuna/exploit/payload.bin" "${ENTRY}/exploit.bin"
+
+# Icon/exploit.sys per model: rebuild with OpenTuna RLE when changed; keep existing files if present.
+for f in exploit.sys slims.bin fats.bin 170.bin; do
+  if [[ ! -s "${ENTRY}/${f}" ]]; then
+    if git show bf0b012:"installer/INSTALLER_CONTENTS/ENTRYPOINT/${f}" > "${ENTRY}/${f}" 2>/dev/null; then
+      echo "Restored ${f} from git bf0b012 (replace after RLE rebuild)."
+    else
+      echo "Missing ${ENTRY}/${f} — build OpenTuna entrypoint or restore blob." >&2
+      exit 1
+    fi
+  fi
+done
+
+echo "Built: opentuna/exploit/payload.bin → ${ENTRY}/exploit.bin"

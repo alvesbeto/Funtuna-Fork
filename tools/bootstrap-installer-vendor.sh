@@ -41,11 +41,18 @@ copy_irx_from_ps2sdk() {
     echo "Missing ${dest} and PS2SDK unset (cannot copy ${name} from SDK)." >&2
     return 1
   }
+  local base="${name%.IRX}"
+  local lower
+  lower="$(printf '%s' "${base}" | tr '[:upper:]' '[:lower:]')"
   local candidates=(
     "${PS2SDK}/iop/irx/${name}"
+    "${PS2SDK}/iop/irx/${lower}.irx"
     "${PS2SDK}/ports/usbmass/irx/${name}"
     "${PS2SDK}/ports/usb/irx/${name}"
   )
+  if [[ "${name}" == "USBD.IRX" ]]; then
+    candidates+=("${PS2SDK}/iop/irx/usbd_mini.irx")
+  fi
   local src=""
   for c in "${candidates[@]}"; do
     if [[ -f "${c}" ]]; then
@@ -54,7 +61,7 @@ copy_irx_from_ps2sdk() {
     fi
   done
   if [[ -z "${src}" ]]; then
-    src="$(find "${PS2SDK}" -name "${name}" -type f 2>/dev/null | head -1 || true)"
+    src="$(find "${PS2SDK}" -iname "${lower}.irx" -type f 2>/dev/null | head -1 || true)"
   fi
   if [[ -z "${src}" || ! -f "${src}" ]]; then
     echo "Missing ${dest}; install PS2SDK IRX or place file manually." >&2

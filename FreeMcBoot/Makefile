@@ -98,8 +98,11 @@ format-check:
 	@! find . -type f -a \( -iname \*.h -o -iname \*.c \) | xargs clang-format -style=file -output-replacements-xml | grep "<replacement " >/dev/null
 	
 	
+IOMANX_IRX ?= $(PS2SDK)/iop/irx/iomanX.irx
+
 iomanx.s:
-	iomanx.s iomanx_irx
+	@echo "--------------- iomanx ---------------"
+	@bin2s "$(IOMANX_IRX)" iomanx.s iomanx_irx
 #filexio.s:
 #	filexio.s filexio_irx
 #usbd.s:
