@@ -2,33 +2,46 @@
 
 Referências: [FunTuna FAQ](https://israpps.github.io/Funtuna-Fork/ASK-ENG.html), [instalação](https://israpps.github.io/Funtuna-Fork/INSTA_ENG.html), [ConsoleMods OpenTuna](https://consolemods.org/wiki/PS2:Fortuna/Opentuna), [PSX-Place OpenTuna](https://www.psx-place.com/threads/opentuna-an-open-source-version-of-fortuna-based-on-reverse-engineering.33010/).
 
-## OpenTuna / variante errada
+**Como usar este doc:** sintomas na consola abaixo; detalhe técnico em [BIOS_ROM_MATRIX.md](BIOS_ROM_MATRIX.md) (ROM/ícone), [USB_IRX_MATRIX.md](USB_IRX_MATRIX.md) (IRX), [OPL_INTEGRATION.md](OPL_INTEGRATION.md) (OPL), [RELEASE_RUNBOOK.md](RELEASE_RUNBOOK.md) (rebuild).
+
+## OpenTuna / ícone
 
 | Sintoma | Causa provável | Ação |
 |---------|----------------|------|
 | Browser branco / freeze ao abrir MC | Ícone para **outra** ROM (ex.: slim bin em FAT 1.10) | Reinstalar com **IconQuery** (L2) ou R2 auto; ver [BIOS_ROM_MATRIX.md](BIOS_ROM_MATRIX.md); não reutilizar `slims.bin`/`fats.bin`/`170.bin` entre modelos |
 | MC “funciona” numa consola e trava noutra idêntica | BIOS/ROM diferente ou cartão preparado para outro modelo | Usar cartão só na consola alvo; ver [avisos OpenTuna](https://www.psx-place.com/threads/opentuna-an-open-source-version-of-fortuna-based-on-reverse-engineering.33010/) |
-| ROM `0x180`–`0x18F` com R2 auto e exploit falha | Instalador classifica como **FATS** (`>= 0x110`, `< 0x190`) | Testar **L2** ou ícone manual; registar no checklist hardware |
+| ROM `0x180`–`0x18F` com R2 auto e exploit falha | Instalador classifica como **FATS** (`>= 0x110`, `< 0x190`) | Testar **L2** ou ícone manual; registar no [STABILITY_CHECKLIST.md](STABILITY_CHECKLIST.md) |
 | ProtoKernel SCPH-10000/15000 | OpenTuna **não suportado** | Installer omite `BXEXEC-OPENTUNA` (`UNSUPPORTED`); não forçar ícones |
 
-Regenerar ícones após mudar launcher:
+**Pasta do exploit:** o instalador grava o ícone em **`mc?:/BXEXEC-OPENTUNA/`** (timestamp **2099** para ficar primeiro no browser). **Não editar** essa pasta à mão. Restaurar data: wLaunchELF bundled → R1 → “Fortuna Date” ([FAQ](https://israpps.github.io/Funtuna-Fork/ASK-ENG.html)). No upgrade, o installer remove a pasta legada **`BXEXEC-FUNTUNA`** se ainda existir.
 
-```bash
-tools/build-opentuna-launcher.sh
-REGENERATE_ENTRYPOINT=1 tools/regenerate-entrypoint-icons.sh
-# ou BUILD_OPENTUNA=1 tools/build-release-local.sh  (REGENERATE_ENTRYPOINT=1 por defeito)
-```
+Afinação RLE por modelo: [notas RLE](https://gist.github.com/ABelliqueux/342ccb4e114fd9369d30b58e53c8b245) + `tools/opentuna-tuned-icons/README.md`. Regenerar ícones / rebuild Opentuna: [RELEASE_RUNBOOK.md](RELEASE_RUNBOOK.md).
 
-Afinação por modelo: [notas RLE](https://gist.github.com/ABelliqueux/342ccb4e114fd9369d30b58e53c8b245) + `tools/opentuna-tuned-icons/README.md`. Payload maior que o embed antigo → os três `.bin` ficam encode base até teste em hardware.
+## Arranque FunTuna
 
-## FunTuna vs OpenTuna puro
+FunTuna arranca **FMCB (`mc?:/BOOT/BOOT.ELF`)** após o exploit; OpenTuna “puro” tende a ir directo para OPL.
 
-FunTuna arranca **FMCB (BOOT.ELF)** com atalhos opcionais (Circle/Cross); OpenTuna vanilla tende a OPL. Recuperação de OPL corrompido: uLE via Cross ou CFG → ULE ([discussão OPL #1381](https://github.com/ps2homebrew/Open-PS2-Loader/issues/1381)).
+| Contexto | Comportamento |
+|----------|----------------|
+| OpenTuna **sem** launch keys | `mc?:/BOOT/BOOT.ELF` |
+| OpenTuna **com** launch keys (variante default do build) | **Circle** → `mc?:/APPS/OPNPS2LD.ELF`; **Cross** → `mc?:/BOOT/ULE.ELF`; nenhuma tecla → `mc?:/BOOT/BOOT.ELF` |
+| Atalhos no menu OSD (FMCB) | `mc?:/BOOT/FUNTUNA.CNF` — paths podem incluir `mass:/FUNTUNA/` |
 
-## CFG.ELF / USB
+Recuperação se OPL na MC estiver corrompido: **Cross** no exploit (keys) ou OSD → uLE / CFG → ULE ([OPL #1381](https://github.com/ps2homebrew/Open-PS2-Loader/issues/1381)).
 
-- Freeze ao navegar `mass:/` no Configurator: preferência **SYS-CONF** (BDM) igual ao `BOOT.ELF` — rebuild CFG recente; IRX PS2SDK em `BOOT/` (commit [b9e3d8f](https://github.com/israpps/Funtuna-Fork/commit/b9e3d8f4ff48df03c371a23702f78e8c52444e97)); não substituir por BDM em `BOOT/` sem validar.
-- OPL freeze pós-install: apagar configs antigos em `mc?:/OPL/` (installer já limpa se detectar layout pré-1.1.0).
+## USB no arranque (FMCB e CFG)
+
+O instalador grava IRX **PS2SDK (FAT32)** em `mc?:/BOOT/` e **BDM Assault (exFAT)** em `mc?:/SYS-CONF/`. **`BOOT.ELF`** e **`CFG.ELF`** tentam carregar o par completo em **SYS-CONF antes de BOOT** (mc0, depois mc1). Ver [USB_IRX_MATRIX.md](USB_IRX_MATRIX.md). Não substituir os IRX de `BOOT/` por BDM sem validar o Configurator em `mass:/`.
+
+| Sintoma | Causa | Ação |
+|---------|--------|------|
+| Logo PS2 / FMCB **trava** com pen USB ligada (install antigo) | Stick **exFAT** + só drivers FAT em `BOOT/` | Reinstalar com installer recente (BDM em `SYS-CONF`) + `BOOT.ELF` / `CFG.ELF` recentes |
+| Boot OK sem USB, trava com USB | Idem ou lixo na raiz da pen | Reinstalar FunTuna ou copiar BDM manualmente para `SYS-CONF` ([BDM Assault releases](https://github.com/israpps/BDMAssault/releases)) |
+| Funciona se desligar USB antes do boot | IRX errados ou ausentes em SYS-CONF | Confirmar **dois** ficheiros em `SYS-CONF`; rebuild FMCB/CFG |
+
+**Workaround imediato:** desligar a pen até o menu OSD, ligar depois (instalações antigas sem BDM em SYS-CONF).
+
+**Partição USB:** alguns relatos de freeze com **GPT**; **MBR** + exFAT resolveu em casos isolados — ver [USB_IRX_MATRIX.md](USB_IRX_MATRIX.md) e [issue #26](https://github.com/israpps/Funtuna-Fork/issues/26).
 
 ## Open PS2 Loader (OPL)
 
@@ -36,42 +49,25 @@ FunTuna arranca **FMCB (BOOT.ELF)** com atalhos opcionais (Circle/Cross); OpenTu
 |---------|----------------|------|
 | OPL trava ao carregar (logo/cinza) | `conf_*.cfg` de OPL **antigo** incompatível | Segurar **START** enquanto o OPL inicia (ignora configs); guardar settings novos no OPL |
 | OPL sem imagem no boot | Modo vídeo não suportado pela TV | Segurar **Triangle + Cross** no arranque do OPL (reset para Auto) |
-| Jogo trava em ecrã branco | ISO fragmentada ou corrompida | Copiar ISO de novo; preferir ficheiros **contíguos** (copiar tudo para PC, formatar pen, voltar a copiar) |
-| ISO >4 GiB em FAT32 | Limite FAT32 | Usar pen **exFAT** (MBR, allocation unit default) + BDM em `SYS-CONF`; ou formato USBExtreme |
-| Lista Apps vazia no OPL | Falta `conf_apps.cfg` | Reinstalar FunTuna (seed grava em `mc?:/OPL/conf_apps.cfg` se não houver `conf_opl.cfg`) ou copiar de `MANUAL_INSTALL/OPL/` |
+| Tela preta / layout OPL pré-1.1.0 após upgrade | Pasta `mc?:/OPL/` com configs antigas | Reinstalar FunTuna (installer limpa OPL se detectar `conf_elm*` / ausência de `conf_game.cfg`) ou apagar `mc?:/OPL/` manualmente |
+| Jogo trava em ecrã branco | ISO fragmentada ou corrompida | Copiar ISO de novo; ficheiros **contíguos** (copiar tudo para PC, formatar pen, voltar a copiar) |
+| ISO >4 GiB em FAT32 | Limite FAT32 | Pen **exFAT** (MBR, allocation unit default) + BDM em `SYS-CONF`; ou formato USBExtreme |
+| Lista Apps vazia no OPL | Falta `conf_apps.cfg` | Reinstalar FunTuna (seed grava `mc?:/OPL/conf_apps.cfg` se não houver `conf_opl.cfg`) ou copiar de `MANUAL_INSTALL/OPL/` |
 
-**ZSO (ISO comprimida):** suportado pelo OPL ≥1.2; compressão com `ziso.py` no repo [Open-PS2-Loader](https://github.com/ps2homebrew/Open-PS2-Loader) (`pc/ziso.py`), não incluído neste fork.
+**ZSO (ISO comprimida):** OPL ≥1.2; ferramenta `ziso.py` no repo [Open-PS2-Loader](https://github.com/ps2homebrew/Open-PS2-Loader) (`pc/ziso.py`), não incluída neste fork.
 
-Template de pastas USB: `__Release/MANUAL_INSTALL/USB-OPL/` — ver [OPL_INTEGRATION.md](OPL_INTEGRATION.md).
-
-## BOOT.ELF / USB exFAT no arranque
-
-| Sintoma | Causa | Ação |
-|---------|--------|------|
-| Logo PS2 / FMCB **trava** com pen USB ligada (install antigo) | Stick **exFAT** + só drivers FAT em `BOOT/` | Reinstalar com installer recente (BDM em `SYS-CONF`) + `BOOT.ELF` com preferência SYS-CONF |
-| Boot OK sem USB, trava com USB | Idem ou `FUNTUNA.CNF` / lixo na raiz da pen | Reinstalar FunTuna ou copiar BDM manualmente para `SYS-CONF` |
-| Funciona se desligar USB antes do boot | Drivers carregados demasiado tarde ou path errado | Confirmar **dois** IRX em SYS-CONF; rebuild `BOOT.ELF` recente |
-
-Workaround imediato: desligar a pen até o menu OSD, ligar depois (instalações antigas sem BDM em SYS-CONF).
-
-## Ícone BXEXEC-FUNTUNA
-
-Data deve ser **2099** para o exploit ficar primeiro. Restaurar: wLaunchELF bundled → R1 → “Fortuna Date” no folder ([FAQ](https://israpps.github.io/Funtuna-Fork/ASK-ENG.html)). **Não editar** `BXEXEC-FUNTUNA` manualmente.
+**Pen para jogos:** copiar a árvore de `__Release/MANUAL_INSTALL/USB-OPL/` — ver [OPL_INTEGRATION.md](OPL_INTEGRATION.md).
 
 ## HDD-OSD / Browser 2.0
 
 OpenTuna/Fortuna **incompatível** com HDD-OSD ativo — pode bloquear reconhecimento da MC até power cycle ([ConsoleMods](https://consolemods.org/wiki/PS2:Fortuna/Opentuna)).
 
-## exFAT
-
-O instalador inclui **BDM Assault** em `mc?:/SYS-CONF/`; `BOOT/` mantém IRX PS2SDK para o Configurator. Atualização manual: [BDM Assault releases](https://github.com/israpps/BDMAssault/releases). Ver [USB_IRX_MATRIX.md](USB_IRX_MATRIX.md).
-
-## Build local
+## Para quem faz build
 
 ```bash
 source ~/.zshrc
-tools/bootstrap-installer-vendor.sh   # ULE + OPL latest + IRX PS2SDK
+tools/bootstrap-installer-vendor.sh
 BUILD_OPENTUNA=1 tools/build-release-local.sh
 ```
 
-`ENTRYPOINT/*.bin` vivem fora do git (`.gitignore`); `tools/regenerate-entrypoint-icons.sh` + `tools/opentuna-static/exploit.sys`. Fallback git em `build-opentuna-launcher.sh` só com `REGENERATE_ENTRYPOINT=0` e blobs em falta.
+Ordem completa, CI e manifests: [RELEASE_RUNBOOK.md](RELEASE_RUNBOOK.md).
