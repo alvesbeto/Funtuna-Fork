@@ -39,6 +39,7 @@ cp "${ROOT}/FreeMcBoot-Configurator/CFG.ELF" "${ROOT}/__Binaries/CFG.ELF"
 
 if [[ "${BUILD_OPENTUNA}" == "1" ]]; then
   echo "==> Opentuna launcher + exploit"
+  export REGENERATE_ENTRYPOINT="${REGENERATE_ENTRYPOINT:-1}"
   "${ROOT}/tools/build-opentuna-launcher.sh"
 fi
 

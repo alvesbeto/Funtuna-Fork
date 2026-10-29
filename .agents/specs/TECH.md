@@ -33,9 +33,11 @@ Rebuild launcher + embed exploit:
 ```bash
 PAYLOAD=launcher-keys-Funtuna tools/build-opentuna-launcher.sh   # default
 PAYLOAD=launcher-no-keys-Funtuna tools/build-opentuna-launcher.sh
+REGENERATE_ENTRYPOINT=1 tools/regenerate-entrypoint-icons.sh     # Java; ver tools/opentuna-tuned-icons/
 ```
 
 Ou altere `PAYLOAD` em `opentuna/exploit/Makefile` e `make -C opentuna/exploit all`.
+
 | PSU publicado | `__Release/FUNTUNA-LAUNCHER.psu` |
 
 **Riscos:** divergência entre payload embedado no installer e PSU publicado; mitigar com script ou checklist único de hashes/tamanhos.

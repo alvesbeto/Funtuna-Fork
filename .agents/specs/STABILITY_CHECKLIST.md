@@ -6,7 +6,8 @@ Preencher no PR que alterar `opentuna/` ou `installer/INSTALLER_CONTENTS/ENTRYPO
 
 - [ ] `PAYLOAD=launcher-keys-Funtuna` em `opentuna/exploit/Makefile` (trocar para `launcher-no-keys-Funtuna` se release sem atalhos); ambas variantes compilam com PS2SDK + `linkfile`/`stubs.c`
 - [ ] `tools/build-opentuna-launcher.sh` executado com PS2SDK; `payload.bin` regenerado se launcher mudou
-- [ ] `slims.bin`, `fats.bin`, `170.bin` atualizados por modelo (não reutilizar um bin para outro)
+- [ ] `REGENERATE_ENTRYPOINT=1` → `tools/regenerate-entrypoint-icons.sh` (Java + OpenTuna RLE); afinação por modelo em `tools/opentuna-tuned-icons/` se o encode base falhar no hardware
+- [ ] `slims.bin`, `fats.bin`, `170.bin` distintos e corretos por ROM (não reutilizar um bin para outro)
 - [ ] Manifesto `.agents/specs/manifests/installer-content.sha256` atualizado
 
 ## Launch keys (`launcher-keys-Funtuna`)

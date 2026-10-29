@@ -21,18 +21,30 @@ make -C "${ROOT}/opentuna/exploit" all
 
 ENTRY="${ROOT}/installer/INSTALLER_CONTENTS/ENTRYPOINT"
 mkdir -p "${ENTRY}"
-cp "${ROOT}/opentuna/exploit/payload.bin" "${ENTRY}/exploit.bin"
 
-# Icon/exploit.sys per model: rebuild with OpenTuna RLE when changed; keep existing files if present.
-for f in exploit.sys slims.bin fats.bin 170.bin; do
-  if [[ ! -s "${ENTRY}/${f}" ]]; then
-    if git show bf0b012:"installer/INSTALLER_CONTENTS/ENTRYPOINT/${f}" > "${ENTRY}/${f}" 2>/dev/null; then
-      echo "Restored ${f} from git bf0b012 (replace after RLE rebuild)."
-    else
-      echo "Missing ${ENTRY}/${f} — build OpenTuna entrypoint or restore blob." >&2
-      exit 1
-    fi
+if [[ "${REGENERATE_ENTRYPOINT:-0}" == "1" ]]; then
+  echo "==> ENTRYPOINT icons (OpenTuna RLE)"
+  "${ROOT}/tools/regenerate-entrypoint-icons.sh"
+else
+  cp "${ROOT}/opentuna/exploit/payload.bin" "${ENTRY}/exploit.bin"
+
+  STATIC_SYS="${ROOT}/tools/opentuna-static/exploit.sys"
+  if [[ -s "${STATIC_SYS}" && ! -s "${ENTRY}/exploit.sys" ]]; then
+    cp "${STATIC_SYS}" "${ENTRY}/exploit.sys"
   fi
-done
 
-echo "Built: opentuna/exploit/payload.bin → ${ENTRY}/exploit.bin"
+  # Optional git fallback for dev offline (legacy tuned icons; may not match current payload size).
+  ENTRYPOINT_FALLBACK_REF="${ENTRYPOINT_FALLBACK_REF:-bf0b012}"
+  for f in exploit.sys slims.bin fats.bin 170.bin; do
+    if [[ ! -s "${ENTRY}/${f}" ]]; then
+      if git show "${ENTRYPOINT_FALLBACK_REF}:installer/INSTALLER_CONTENTS/ENTRYPOINT/${f}" > "${ENTRY}/${f}" 2>/dev/null; then
+        echo "Restored ${f} from git ${ENTRYPOINT_FALLBACK_REF} (run REGENERATE_ENTRYPOINT=1 after launcher changes)."
+      else
+        echo "Missing ${ENTRY}/${f} — set REGENERATE_ENTRYPOINT=1 or restore blob." >&2
+        exit 1
+      fi
+    fi
+  done
+
+  echo "Built: opentuna/exploit/payload.bin → ${ENTRY}/exploit.bin"
+fi

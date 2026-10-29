@@ -34,7 +34,7 @@ SKIP_INSTALLER=1 tools/build-release-local.sh   # só ELF BOOT/CFG + variantes
 | 1 | `make -C FreeMcBoot clean all` | `FreeMcBoot/BOOT.ELF` |
 | 2 | `make -C FreeMcBoot-Configurator clean all` | `FreeMcBoot-Configurator/CFG.ELF` |
 | 3 | Copiar `BOOT.ELF`, `CFG.ELF` → `installer/INSTALLER_CONTENTS/BOOT/` e `__Binaries/` | embeds alinhados |
-| 4 | (Se Opentuna mudou) `tools/build-opentuna-launcher.sh` + bins por modelo → `installer/INSTALLER_CONTENTS/ENTRYPOINT/` | `exploit.sys`, `*.bin` |
+| 4 | Opentuna: `BUILD_OPENTUNA=1` → `build-opentuna-launcher.sh` + `REGENERATE_ENTRYPOINT=1` → `regenerate-entrypoint-icons.sh` (Java) | `ENTRYPOINT/exploit.sys`, `*.bin` |
 | 5 | `make -C installer clean all` | `installer/FunTuna-Fork_Installer.ELF` |
 | 6 | `tools/sync-installer-manifest.sh` | manifest SHA-256 |
 | 7 | `tools/prepare-release-variants.sh` | `__Release/!Funtuna-*/BOOT/*` |
