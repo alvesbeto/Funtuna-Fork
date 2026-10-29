@@ -14,7 +14,7 @@
 
 Binários de build (`BOOT.ELF`, `CFG.ELF`, installer packed, `__Release/!Funtuna-*/BOOT/`, `__Binaries/*` excepto README) **não** vão para o git — ver `.gitignore`. Clone limpo:
 
-1. `tools/bootstrap-installer-vendor.sh` — IRX do PS2SDK; **ULE** ([wLaunchELF_ISR latest](https://github.com/israpps/wLaunchELF_ISR/releases/tag/latest)); **OPNPS2LD.ELF** ([Open-PS2-Loader latest](https://github.com/ps2homebrew/Open-PS2-Loader/releases/tag/latest)); valida `POWEROFF.ELF` versionado
+1. `tools/bootstrap-installer-vendor.sh` — IRX PS2SDK → `BOOT/`; **BDM Assault** → `SYS-CONF/` (requer `7z`, rede); **ULE**; **OPNPS2LD.ELF**; valida `POWEROFF.ELF` versionado
 2. `tools/build-release-local.sh` — rebuild completo + manifest local (não commitado)
 
 ## Atalho (maintainer)

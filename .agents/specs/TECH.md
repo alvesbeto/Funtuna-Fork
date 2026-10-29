@@ -54,7 +54,7 @@ Implementação FMCB (`load_modules` em `launcher2.c`): tenta, por ordem, par co
 
 ## Installer embeds (fases A, C)
 
-`installer/main.c` declara blobs Opentuna, FMCB, CFG, OPL icons/cfg, USB IRX — qualquer bump de subprojeto exige regenerar headers/binários do installer (padrão existente do repo, não inventar novo packer sem ADR).
+`installer/main.c` declara blobs Opentuna, FMCB, CFG, OPL icons/cfg, USB IRX (PS2SDK → `BOOT/`, BDM Assault → `SYS-CONF/` via bootstrap) — qualquer bump de subprojeto exige regenerar headers/binários do installer (padrão existente do repo, não inventar novo packer sem ADR).
 
 **Matriz de detecção:** headers em `installer/ERROR_MESSAGES/` — alterações de copy exigem rebuild apenas do installer, não do FMCB.
 

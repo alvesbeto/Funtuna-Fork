@@ -26,7 +26,7 @@ Falha em todas as tentativas: USB mass storage indisponível no boot FMCB; conso
 
 ## Instalação padrão FunTuna
 
-O installer grava IRX em `mc?:/BOOT/` (`installer/main.c`). **exFAT:** copiar release BDM Assault (`bdm_assault.irx` → `USBD.IRX`, `usbd_bd_assault.irx` → `USBHDFSD.IRX`) para `mc?:/SYS-CONF/` — não substituir `BOOT/` se quiser evitar regressões no Configurator ([commit b9e3d8f](https://github.com/israpps/Funtuna-Fork/commit/b9e3d8f4ff48df03c371a23702f78e8c52444e97)).
+O installer grava IRX **PS2SDK (FAT32)** em `mc?:/BOOT/` e **BDM Assault (exFAT)** em `mc?:/SYS-CONF/` (`installer/main.c`, blobs via `tools/bootstrap-installer-vendor.sh` + `p7zip-full`). O `BOOT.ELF` preferencia o par em SYS-CONF no arranque.
 
 Alternativa documentada na comunidade FunTuna: BDM directamente em `BOOT/` ([PSX-Place BDMAssault](https://www.psx-place.com/resources/bdmassault.1393/)) — validar CFG.ELF em `mass:/`.
 

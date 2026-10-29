@@ -33,11 +33,11 @@ FunTuna arranca **FMCB (BOOT.ELF)** com atalhos opcionais (Circle/Cross); OpenTu
 
 | Sintoma | Causa | Ação |
 |---------|--------|------|
-| Logo PS2 / FMCB **trava** com pen USB ligada | Stick **exFAT** (ou GPT) + drivers **FAT-only** de `mc?:/BOOT/` | Instalar [BDM Assault](https://github.com/israpps/BDMAssault) em `mc?:/SYS-CONF/USBD.IRX` e `USBHDFSD.IRX` ([guia BDM](https://github.com/israpps/BDMAssault#freemcboot)); `BOOT.ELF` passa a preferir SYS-CONF quando o par existe |
-| Boot OK sem USB, trava com USB | Idem ou `FUNTUNA.CNF` / lixo na raiz da pen | Testar pen vazia FAT32; depois exFAT + BDM |
+| Logo PS2 / FMCB **trava** com pen USB ligada (install antigo) | Stick **exFAT** + só drivers FAT em `BOOT/` | Reinstalar com installer recente (BDM em `SYS-CONF`) + `BOOT.ELF` com preferência SYS-CONF |
+| Boot OK sem USB, trava com USB | Idem ou `FUNTUNA.CNF` / lixo na raiz da pen | Reinstalar FunTuna ou copiar BDM manualmente para `SYS-CONF` |
 | Funciona se desligar USB antes do boot | Drivers carregados demasiado tarde ou path errado | Confirmar **dois** IRX em SYS-CONF; rebuild `BOOT.ELF` recente |
 
-Workaround imediato: desligar a pen até o menu OSD, ligar depois (não ideal para desgaste da porta).
+Workaround imediato: desligar a pen até o menu OSD, ligar depois (instalações antigas sem BDM em SYS-CONF).
 
 ## Ícone BXEXEC-FUNTUNA
 
@@ -49,7 +49,7 @@ OpenTuna/Fortuna **incompatível** com HDD-OSD ativo — pode bloquear reconheci
 
 ## exFAT
 
-Opcional via [BDM Assault](https://github.com/israpps/BDMAssault) em **`SYS-CONF`** (recomendado; ver [USB_IRX_MATRIX.md](USB_IRX_MATRIX.md)). Substituir `BOOT/` por BDM só se CFG.ELF for testado. Não faz parte do build padrão deste fork.
+O instalador inclui **BDM Assault** em `mc?:/SYS-CONF/`; `BOOT/` mantém IRX PS2SDK para o Configurator. Atualização manual: [BDM Assault releases](https://github.com/israpps/BDMAssault/releases). Ver [USB_IRX_MATRIX.md](USB_IRX_MATRIX.md).
 
 ## Build local
 

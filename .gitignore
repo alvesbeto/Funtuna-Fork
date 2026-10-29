@@ -226,6 +226,8 @@ installer/apps_sys.s
 installer/poweroff_elf.s
 installer/FUNTUNA_USBHDFSD.s
 installer/FUNTUNA_USBD.s
+installer/FUNTUNA_BDM_USBHDFSD.s
+installer/FUNTUNA_BDM_USBD.s
 installer/ule_cnf.s
 installer/boot_sys.s
 installer/boot_icn.s
@@ -247,6 +249,8 @@ installer/INSTALLER_CONTENTS/BOOT/CFG.ELF
 installer/INSTALLER_CONTENTS/BOOT/ULE.ELF
 installer/INSTALLER_CONTENTS/BOOT/USBD.IRX
 installer/INSTALLER_CONTENTS/BOOT/USBHDFSD.IRX
+installer/INSTALLER_CONTENTS/SYS-CONF/USBD.IRX
+installer/INSTALLER_CONTENTS/SYS-CONF/USBHDFSD.IRX
 installer/INSTALLER_CONTENTS/APPS/OPNPS2LD.ELF
 
 # Staging de release (tools/prepare-release-variants.sh)
