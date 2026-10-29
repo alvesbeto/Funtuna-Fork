@@ -62,6 +62,16 @@ Ver tabela completa em [CI_WORKFLOWS.md](CI_WORKFLOWS.md).
 | `stable.yml` | `workflow_dispatch` | `__Binaries` → variantes, zip, release |
 | `repack-and-release.yml` | dispatch / push installer / `Component_update` | rebuild installer, 7z, release em `main` |
 | `Update-uLaunchELF.yml` | dispatch / `Component_update` | commit `__Binaries/ULE.ELF` |
+| `Update-OPL.yml` | dispatch | commit `manifests/opl-pin.txt` only |
+
+**Gap OPL (após `Update-OPL.yml` ou bump manual):**
+
+1. `VENDOR_REFRESH=1 tools/bootstrap-installer-vendor.sh`
+2. Rever `installer/INSTALLER_CONTENTS/OPL/conf_opl*.cfg` vs README OPL upstream
+3. `make -C installer clean all` + `tools/sync-installer-manifest.sh`
+4. `BUILD_OPENTUNA=1 tools/build-release-local.sh` ou repack CI
+
+Ver [OPL_INTEGRATION.md](OPL_INTEGRATION.md) e template USB: `__Release/MANUAL_INSTALL/USB-OPL/`.
 
 **Gap ULE (obrigatório após `Update-uLaunchELF.yml`):**
 
@@ -96,4 +106,4 @@ Variantes `__Release/!Funtuna-*/BOOT/` são geradas no job (ou localmente via `p
 
 ## OPL bundled
 
-Ficheiros em `installer/INSTALLER_CONTENTS/OPL/`; sem workflow automático dedicado — atualizar ficheiros, rebuild installer, commit.
+Ficheiros em `installer/INSTALLER_CONTENTS/OPL/` (incl. `conf_apps.cfg` no seed installer). Pin: `manifests/opl-pin.txt` via **`Update-OPL.yml`**. Pen USB para jogos: copiar árvore de `__Release/MANUAL_INSTALL/USB-OPL/` — ver [OPL_INTEGRATION.md](OPL_INTEGRATION.md).

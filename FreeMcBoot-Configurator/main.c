@@ -883,53 +883,57 @@ void loadBasicModules(void)
 	}*/
 //}
 int loadUsbModules(void)
-{  //function used for loading usb modules from fmcb default install path
+{  /* Same IRX pair order as FreeMcBoot/launcher2.c (SYS-CONF before BOOT). */
 	char filePath[MAX_PATH];
 	void *fileBase;
-	int fileSize, dummy, error = 0, i;
+	int fileSize, dummy, error = 1, pi, mi;
 	FILE *File;
-
-	fileBase = NULL;
-	fileSize = 0;
+	static const char *usb_pairs[][2] = {
+	    {"mc0:/SYS-CONF/USBD.IRX", "mc0:/SYS-CONF/USBHDFSD.IRX"},
+	    {"mc1:/SYS-CONF/USBD.IRX", "mc1:/SYS-CONF/USBHDFSD.IRX"},
+	    {"mc0:/BOOT/USBD.IRX", "mc0:/BOOT/USBHDFSD.IRX"},
+	    {"mc1:/BOOT/USBD.IRX", "mc1:/BOOT/USBHDFSD.IRX"},
+	};
 
 	if (have_usbd && have_usb_mass)
 		return 3;
 
-	for (i = 1; i < 3; i++) {
-		if (i == 1)
-			strcpy(filePath, "mc0:/BOOT/USBD.IRX");
-		else if (i == 2)
-			strcpy(filePath, "mc0:/BOOT/USBHDFSD.IRX");
-		if (!exists(filePath))
-			filePath[2] ^= 1;
-		if (!exists(filePath)) {
-			error = i;  // 1 = error usbd, 2 = error usbhdfsd
-			break;
-		}
+	for (pi = 0; pi < 4; pi++) {
+		if (!exists((char *)usb_pairs[pi][0]) || !exists((char *)usb_pairs[pi][1]))
+			continue;
 
-		File = fopen(filePath, "r");
-		if (File != NULL) {
+		error = 0;
+		for (mi = 0; mi < 2 && !error; mi++) {
+			strcpy(filePath, usb_pairs[pi][mi]);
+			fileBase = NULL;
+			fileSize = 0;
+			File = fopen(filePath, "r");
+			if (File == NULL) {
+				error = mi + 1;
+				break;
+			}
 			fseek(File, 0, SEEK_END);
 			fileSize = ftell(File);
 			fseek(File, 0, SEEK_SET);
-			if (fileSize) {
-				if ((fileBase = malloc(fileSize)) > 0) {
-					fread(fileBase, 1, fileSize, File);
-				} else
-					fileSize = 0;
+			if (!fileSize || (fileBase = malloc(fileSize)) == NULL) {
+				fclose(File);
+				error = mi + 1;
+				break;
 			}
+			fread(fileBase, 1, fileSize, File);
 			fclose(File);
+			if (SifExecModuleBuffer(fileBase, fileSize, 0, NULL, &dummy) < 0) {
+				free(fileBase);
+				error = -(mi + 1);
+				break;
+			}
+			free(fileBase);
 		}
-		if ((SifExecModuleBuffer(fileBase, fileSize, 0, NULL, &dummy)) < 0) {
-			error = -i;  // -1 = error usbd, -2 = error usbhdfsd
-			break;
+		if (!error) {
+			have_usbd = 1;
+			have_usb_mass = 1;
+			return 0;
 		}
-		free(fileBase);
-	}
-	free(fileBase);
-	if (!error) {
-		have_usbd = 1;
-		have_usb_mass = 1;
 	}
 
 	return error;

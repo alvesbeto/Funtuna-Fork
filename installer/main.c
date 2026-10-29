@@ -23,6 +23,9 @@ extern int size_opl_cfg1;
 //----------------------------------------//
 extern u8 opl_dualshock[];
 extern int size_opl_dualshock;
+//----------------------------------------//
+extern u8 opl_apps[];
+extern int size_opl_apps;
 //
 //----------------------------------------//
 extern u8  opentuna_slims[];
@@ -506,6 +509,7 @@ static int install(int mcport, int icon_variant)
 		write_embed_replace(&opl_icn, size_opl_icn, "OPL", "opl.icn", mcport);
 		write_embed_replace(&opl_sys, size_opl_sys, "OPL", "icon.sys", mcport);
 		write_embed_replace(&opl_dualshock, size_opl_dualshock, "OPL", "conf_game.cfg", mcport);
+		write_embed_replace(&opl_apps, size_opl_apps, "OPL", "conf_apps.cfg", mcport);
 	}
 	scr_printf("Installation Finished\n");
 	return 0;

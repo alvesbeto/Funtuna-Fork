@@ -9,10 +9,11 @@
 | clang-format | `_check-format.yml` | Push/PR em `FreeMcBoot/**`, `FreeMcBoot-Configurator/**` (branch `master` no YAML — alinhar ao default do repo se for `main`) |
 | Labeler | `label.yml` | PR automático (requer `.github/labeler.yml`) |
 | Update uLaunchELF | `Update-uLaunchELF.yml` | Baixa ULE para `installer/.../ULE.ELF`; rebuild installer local/CI ( **`__Binaries/` não é commitado** ) |
+| Update OPL pin | `Update-OPL.yml` | Descarrega `OPNPS2LD.ELF`, grava SHA em `.agents/specs/manifests/opl-pin.txt` (ELF gitignored); rebuild via bootstrap |
 | stable Release | `stable.yml` | Container `ps2dev`: `bootstrap` + `build-release-local.sh`, zip `__Release/*` |
 | Release Funtuna (installer) | `repack-and-release.yml` | Rebuild **installer** no container `ps2dev/ps2dev`, 7z de `__Release/`, artefato `FunTuna-Fork_Installer.ELF` |
 
-Não há workflow dedicado só para **OPL** — OPL fica em `installer/INSTALLER_CONTENTS/OPL/` e entra no pacote via `repack-and-release.yml` (`MANUAL_INSTALL/OPL/`).
+Detalhe OPL: **`Update-OPL.yml`** + [OPL_INTEGRATION.md](OPL_INTEGRATION.md). Configs em `installer/INSTALLER_CONTENTS/OPL/` entram no pacote via `repack-and-release.yml` (`MANUAL_INSTALL/OPL/`).
 
 ## `stable.yml`
 
@@ -57,7 +58,21 @@ Atualiza binários ULE no repo e faz commit. **Não** rebuilda installer nem `__
 | Config / ícones | `installer/INSTALLER_CONTENTS/OPL/` |
 | No pacote manual | `__Release/MANUAL_INSTALL/OPL/` (após repack CI) |
 
-Atualização: substituir ficheiros em `INSTALLER_CONTENTS/OPL/`, rebuild installer, commit; ou estender workflow (fora de escopo atual).
+Atualização: substituir ficheiros em `INSTALLER_CONTENTS/OPL/`, rebuild installer, commit; ou `workflow_dispatch` → **`Update-OPL.yml`** (pin SHA) + bootstrap local.
+
+## `Update-OPL.yml`
+
+**Disparo:** `workflow_dispatch`.
+
+1. Descarrega `OPNPS2LD.ELF` (mesmo URL default que `bootstrap-installer-vendor.sh`).
+2. Escreve `.agents/specs/manifests/opl-pin.txt` (URL, UTC, SHA-256).
+3. Commit do pin apenas — **não** commita o ELF (`.gitignore`).
+
+**Após bump OPL:**
+
+1. `VENDOR_REFRESH=1 tools/bootstrap-installer-vendor.sh`
+2. Rever `conf_opl.cfg` / `conf_opl1.cfg` vs [README OPL](https://github.com/ps2homebrew/Open-PS2-Loader) (`usb_mode`, `eth_mode`, `exit_path`, …)
+3. `make -C installer clean all` + `tools/sync-installer-manifest.sh`
 
 ## Validação CI (maintainer)
 

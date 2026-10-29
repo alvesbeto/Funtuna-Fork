@@ -7,6 +7,8 @@ MANIFEST="${ROOT}/.agents/specs/manifests/installer-content.sha256"
 ENTRY="${ROOT}/installer/INSTALLER_CONTENTS/ENTRYPOINT"
 BOOT="${ROOT}/installer/INSTALLER_CONTENTS/BOOT"
 SYSCONF="${ROOT}/installer/INSTALLER_CONTENTS/SYS-CONF"
+APPS="${ROOT}/installer/INSTALLER_CONTENTS/APPS"
+OPL="${ROOT}/installer/INSTALLER_CONTENTS/OPL"
 
 mkdir -p "$(dirname "$MANIFEST")"
 {
@@ -19,6 +21,12 @@ mkdir -p "$(dirname "$MANIFEST")"
   fi
   if [[ -d "$SYSCONF" ]]; then
     (cd "$SYSCONF" && sha256sum USBD.IRX USBHDFSD.IRX 2>/dev/null || true)
+  fi
+  if [[ -d "$APPS" ]]; then
+    (cd "$APPS" && sha256sum OPNPS2LD.ELF 2>/dev/null || true)
+  fi
+  if [[ -d "$OPL" ]]; then
+    (cd "$OPL" && sha256sum conf_opl.cfg conf_opl1.cfg conf_game.cfg conf_apps.cfg 2>/dev/null || true)
   fi
 } > "$MANIFEST"
 

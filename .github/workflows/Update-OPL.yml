@@ -1,0 +1,39 @@
+name: Update OPL pin
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [Component_update]
+
+jobs:
+  update-opl-pin:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.PUSHPAT }}
+
+    - name: Download OPNPS2LD.ELF and write pin
+      env:
+        OPL_URL: https://github.com/ps2homebrew/Open-PS2-Loader/releases/download/latest/OPNPS2LD.ELF
+      run: |
+        set -euo pipefail
+        DEST="installer/INSTALLER_CONTENTS/APPS/OPNPS2LD.ELF"
+        mkdir -p "$(dirname "$DEST")"
+        wget -q -O "$DEST" "$OPL_URL"
+        SHA="$(sha256sum "$DEST" | awk '{print $1}')"
+        PIN=".agents/specs/manifests/opl-pin.txt"
+        mkdir -p "$(dirname "$PIN")"
+        {
+          echo "# Open PS2 Loader bundled ELF pin (file gitignored; rebuild installer via bootstrap)"
+          echo "url=${OPL_URL}"
+          echo "updated_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          echo "sha256=${SHA}"
+        } > "$PIN"
+        echo "Pinned sha256=${SHA}"
+
+    - uses: EndBug/add-and-commit@v9
+      with:
+        default_author: github_actions
+        message: 'Update OPL pin (manifests/opl-pin.txt)'

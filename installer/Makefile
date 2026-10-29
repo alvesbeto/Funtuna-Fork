@@ -2,8 +2,8 @@ EE_BIN = Installer.elf
 EE_BIN_PACKED = FunTuna-Fork_Installer.ELF
 EE_BIN_STRIPPED = stripped.elf
 EE_OBJS = main.o gs.o pad.o  gs_asm.o ps2_asm.o dma_asm.o
-EE_OBJS += FMCB_ELF.o CFG_ELF.o opl_elf.o ule_elf.o apps_icn.o apps_sys.o poweroff_elf.o FUNTUNA_USBHDFSD.o FUNTUNA_USBD.o FUNTUNA_BDM_USBHDFSD.o FUNTUNA_BDM_USBD.o ule_cnf.o boot_sys.o boot_icn.o exploit_sys.o exploit_bin.o FMCB_CNF.o OpenTuna_SLIMS.o OpenTuna_FAT-170.o OpenTuna_FAT-110-120-150-160.o opl_icn.o opl_sys.o opl_cfg.o opl_cfg1.o opl_dualshock.o
-EE_SRC =   FMCB_ELF.s CFG_ELF.s opl_elf.s ule_elf.s apps_icn.s apps_sys.s poweroff_elf.s FUNTUNA_USBHDFSD.s FUNTUNA_USBD.s FUNTUNA_BDM_USBHDFSD.s FUNTUNA_BDM_USBD.s ule_cnf.s boot_sys.s boot_icn.s exploit_sys.s exploit_bin.s FMCB_CNF.s OpenTuna_SLIMS.s OpenTuna_FAT-170.s OpenTuna_FAT-110-120-150-160.s opl_icn.s opl_sys.s opl_cfg.s opl_cfg1.s opl_dualshock.s
+EE_OBJS += FMCB_ELF.o CFG_ELF.o opl_elf.o ule_elf.o apps_icn.o apps_sys.o poweroff_elf.o FUNTUNA_USBHDFSD.o FUNTUNA_USBD.o FUNTUNA_BDM_USBHDFSD.o FUNTUNA_BDM_USBD.o ule_cnf.o boot_sys.o boot_icn.o exploit_sys.o exploit_bin.o FMCB_CNF.o OpenTuna_SLIMS.o OpenTuna_FAT-170.o OpenTuna_FAT-110-120-150-160.o opl_icn.o opl_sys.o opl_cfg.o opl_cfg1.o opl_dualshock.o opl_apps.o
+EE_SRC =   FMCB_ELF.s CFG_ELF.s opl_elf.s ule_elf.s apps_icn.s apps_sys.s poweroff_elf.s FUNTUNA_USBHDFSD.s FUNTUNA_USBD.s FUNTUNA_BDM_USBHDFSD.s FUNTUNA_BDM_USBD.s ule_cnf.s boot_sys.s boot_icn.s exploit_sys.s exploit_bin.s FMCB_CNF.s OpenTuna_SLIMS.s OpenTuna_FAT-170.s OpenTuna_FAT-110-120-150-160.s opl_icn.s opl_sys.s opl_cfg.s opl_cfg1.s opl_dualshock.s opl_apps.s
 EE_LIBS = -ldebug -lcdvd -lpatches -lpad -lmc
 
 ifeq ($(BOOT_FUNTUNA_ON_SUCCESS),1)
@@ -80,6 +80,9 @@ opl_cfg1.s:
 	
 opl_dualshock.s:
 	@bin2s INSTALLER_CONTENTS/OPL/conf_game.cfg opl_dualshock.s opl_dualshock
+
+opl_apps.s:
+	@bin2s INSTALLER_CONTENTS/OPL/conf_apps.cfg opl_apps.s opl_apps
 	
 # /OPL
 
@@ -106,7 +109,7 @@ clean:
 	@echo ...objs and $(EE_BIN_PACKED) $(EE_BIN_STRIPPED) $(EE_BIN)
 	@rm -fr *.o $(EE_BIN_PACKED) $(EE_BIN_STRIPPED) $(EE_BIN)
 	@echo ...embedded resources
-	@rm -fr FMCB_ELF.* FMCB_CNF.* CFG_ELF.* opl_elf.* ule_elf.* apps_icn.* apps_sys.* poweroff_elf.* FUNTUNA_USBHDFSD.* FUNTUNA_USBD.* FUNTUNA_BDM_USBHDFSD.* FUNTUNA_BDM_USBD.* ule_cnf.* boot_sys.* boot_icn.* OpenTuna_SLIMS.* OpenTuna_FAT-170.* OpenTuna_FAT-110-120-150-160.* opl_icn.* opl_sys.* opl_cfg.* opl_cfg1.* opl_dualshock.*
+	@rm -fr FMCB_ELF.* FMCB_CNF.* CFG_ELF.* opl_elf.* ule_elf.* apps_icn.* apps_sys.* poweroff_elf.* FUNTUNA_USBHDFSD.* FUNTUNA_USBD.* FUNTUNA_BDM_USBHDFSD.* FUNTUNA_BDM_USBD.* ule_cnf.* boot_sys.* boot_icn.* OpenTuna_SLIMS.* OpenTuna_FAT-170.* OpenTuna_FAT-110-120-150-160.* opl_icn.* opl_sys.* opl_cfg.* opl_cfg1.* opl_dualshock.* opl_apps.*
 
 clean-bin:
 	@rm $(EE_BIN_PACKED) 

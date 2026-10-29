@@ -30,7 +30,7 @@ Launcher homebrew PS2 para modelos incompatíveis com FMCB clássico: payload **
 
 Mapa e ordem de build: [specs/CAPABILITY_MAP.md](specs/CAPABILITY_MAP.md).
 
-Documentação operacional: [STABILITY_CHECKLIST.md](specs/STABILITY_CHECKLIST.md), [BIOS_ROM_MATRIX.md](specs/BIOS_ROM_MATRIX.md), [TROUBLESHOOTING.md](specs/TROUBLESHOOTING.md), [USB_IRX_MATRIX.md](specs/USB_IRX_MATRIX.md), [INSTALLER_STATE_MATRIX.md](specs/INSTALLER_STATE_MATRIX.md), [OSD_CONFIGURATOR.md](specs/OSD_CONFIGURATOR.md), [RELEASE_RUNBOOK.md](specs/RELEASE_RUNBOOK.md), [CI_WORKFLOWS.md](specs/CI_WORKFLOWS.md).
+Documentação operacional: [STABILITY_CHECKLIST.md](specs/STABILITY_CHECKLIST.md), [BIOS_ROM_MATRIX.md](specs/BIOS_ROM_MATRIX.md), [OPL_INTEGRATION.md](specs/OPL_INTEGRATION.md), [TROUBLESHOOTING.md](specs/TROUBLESHOOTING.md), [USB_IRX_MATRIX.md](specs/USB_IRX_MATRIX.md), [INSTALLER_STATE_MATRIX.md](specs/INSTALLER_STATE_MATRIX.md), [OSD_CONFIGURATOR.md](specs/OSD_CONFIGURATOR.md), [RELEASE_RUNBOOK.md](specs/RELEASE_RUNBOOK.md), [CI_WORKFLOWS.md](specs/CI_WORKFLOWS.md).
 
 ADR: [adrs/ADR-0001-programa-spec-driven.mdc](adrs/ADR-0001-programa-spec-driven.mdc).
 

@@ -1,0 +1,5 @@
+# Open PS2 Loader bundled ELF pin (OPNPS2LD.ELF is gitignored under installer/INSTALLER_CONTENTS/APPS/)
+# Updated by .github/workflows/Update-OPL.yml or manually after bootstrap.
+url=https://github.com/ps2homebrew/Open-PS2-Loader/releases/download/latest/OPNPS2LD.ELF
+updated_utc=unpinned
+sha256=

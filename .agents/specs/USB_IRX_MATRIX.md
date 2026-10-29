@@ -32,7 +32,7 @@ Alternativa documentada na comunidade FunTuna: BDM directamente em `BOOT/` ([PSX
 
 ## FreeMcBoot Configurator
 
-O Configurator **não** carrega módulos USB IRX no boot; usa paths em `OSDSYS`/`USBD_FILE` (default `mc0:/BOOT/...`). Paridade “prefer SYS-CONF” aplica-se ao **BOOT.ELF**, não ao CFG.ELF.
+Ao aceder `mass:/`, `loadUsbModules()` em `FreeMcBoot-Configurator/main.c` usa a **mesma ordem de pares** que `BOOT.ELF` (SYS-CONF → BOOT, mc0 → mc1). Menus `USBD_FILE` / overrides em `LAUNCHELF.CNF` continuam independentes.
 
 ## Regressão pós-install
 

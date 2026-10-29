@@ -15,5 +15,6 @@ Seção **5** em PROGRAM.md — runbook, workflows documentados, checklist alinh
 - [RELEASE_RUNBOOK.md](../RELEASE_RUNBOOK.md) — ordem build local
 - [CI_WORKFLOWS.md](../CI_WORKFLOWS.md) — workflows
 - `tools/build-release-local.sh`, `tools/prepare-release-variants.sh`, `tools/sync-installer-manifest.sh`
+- Pin OPL: `.github/workflows/Update-OPL.yml` → `.agents/specs/manifests/opl-pin.txt` (`OPNPS2LD.ELF` gitignored)
 
-**Status:** Fase E — scripts + docs; validar dispatch CI no GitHub após push.
+**Status:** Fase E + [OPL_INTEGRATION.md](../OPL_INTEGRATION.md); validar dispatch CI no GitHub após push.

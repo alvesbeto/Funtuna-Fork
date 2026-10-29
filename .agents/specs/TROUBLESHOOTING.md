@@ -27,8 +27,22 @@ FunTuna arranca **FMCB (BOOT.ELF)** com atalhos opcionais (Circle/Cross); OpenTu
 
 ## CFG.ELF / USB
 
-- Freeze ao navegar `mass:/` no Configurator: drivers USB incompatíveis — pacote usa IRX oficiais em `BOOT/` (commit [b9e3d8f](https://github.com/israpps/Funtuna-Fork/commit/b9e3d8f4ff48df03c371a23702f78e8c52444e97)); não substituir por BDM em `BOOT/` sem validar CFG.
+- Freeze ao navegar `mass:/` no Configurator: preferência **SYS-CONF** (BDM) igual ao `BOOT.ELF` — rebuild CFG recente; IRX PS2SDK em `BOOT/` (commit [b9e3d8f](https://github.com/israpps/Funtuna-Fork/commit/b9e3d8f4ff48df03c371a23702f78e8c52444e97)); não substituir por BDM em `BOOT/` sem validar.
 - OPL freeze pós-install: apagar configs antigos em `mc?:/OPL/` (installer já limpa se detectar layout pré-1.1.0).
+
+## Open PS2 Loader (OPL)
+
+| Sintoma | Causa provável | Ação |
+|---------|----------------|------|
+| OPL trava ao carregar (logo/cinza) | `conf_*.cfg` de OPL **antigo** incompatível | Segurar **START** enquanto o OPL inicia (ignora configs); guardar settings novos no OPL |
+| OPL sem imagem no boot | Modo vídeo não suportado pela TV | Segurar **Triangle + Cross** no arranque do OPL (reset para Auto) |
+| Jogo trava em ecrã branco | ISO fragmentada ou corrompida | Copiar ISO de novo; preferir ficheiros **contíguos** (copiar tudo para PC, formatar pen, voltar a copiar) |
+| ISO >4 GiB em FAT32 | Limite FAT32 | Usar pen **exFAT** (MBR, allocation unit default) + BDM em `SYS-CONF`; ou formato USBExtreme |
+| Lista Apps vazia no OPL | Falta `conf_apps.cfg` | Reinstalar FunTuna (seed grava em `mc?:/OPL/conf_apps.cfg` se não houver `conf_opl.cfg`) ou copiar de `MANUAL_INSTALL/OPL/` |
+
+**ZSO (ISO comprimida):** suportado pelo OPL ≥1.2; compressão com `ziso.py` no repo [Open-PS2-Loader](https://github.com/ps2homebrew/Open-PS2-Loader) (`pc/ziso.py`), não incluído neste fork.
+
+Template de pastas USB: `__Release/MANUAL_INSTALL/USB-OPL/` — ver [OPL_INTEGRATION.md](OPL_INTEGRATION.md).
 
 ## BOOT.ELF / USB exFAT no arranque
 

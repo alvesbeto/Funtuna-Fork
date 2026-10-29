@@ -36,7 +36,7 @@ Auto (`GetIconType` + R2): ROM mapeada em `main.c` → variante default.
 | `BXEXEC-OPENTUNA/` | icon.icn (variante), icon.sys, icon.cnf timestamp trick |
 | `BOOT/` | BOOT.ELF, CFG.ELF, FUNTUNA.CNF, ULE, IRX, icons |
 | `APPS/` | OPL ELF + icons |
-| `OPL/` | conf presets se ausente |
+| `OPL/` | conf presets se ausente (`conf_opl.cfg`, ícones, `conf_game.cfg`, **`conf_apps.cfg`**) |
 
 ## Cenários de teste manual
 

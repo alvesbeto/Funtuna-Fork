@@ -119,6 +119,8 @@ Release depende de `__Binaries/` + cópia para variantes (`stable.yml`); uLaunch
 
 - CI verde em `clang-format`; job de release completa com artefatos esperados.
 
+**Addendum OPL:** integração bundle/installer/Configurator (sem reescrever OPL upstream) — [`OPL_INTEGRATION.md`](OPL_INTEGRATION.md).
+
 ---
 
 ## Ordem de entrega recomendada

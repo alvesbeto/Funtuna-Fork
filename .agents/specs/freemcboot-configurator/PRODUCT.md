@@ -4,7 +4,7 @@
 
 ## Escopo deste módulo
 
-`CFG.ELF`: UI de settings, paths `SYS-CONF`, filename de config FunTuna distinto do FMCB vanilla, paridade de expectativa USB com FMCB.
+`CFG.ELF`: UI de settings, paths `SYS-CONF`, filename de config FunTuna distinto do FMCB vanilla, paridade USB com FMCB (`loadUsbModules`: pares SYS-CONF antes de BOOT, ver [../USB_IRX_MATRIX.md](../USB_IRX_MATRIX.md)).
 
 ## Critérios de sucesso (resumo)
 
